@@ -36,6 +36,42 @@ model Order {
   norma                 String @db.Text
   lote                  String @db.Text
 
+  contacts Contact[]
+
+  events Event[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Contact {
+  id String @id @default(uuid())
+
+  orderId String? @db.Text
+  name    String  @db.Text
+  role    String  @db.Text
+  code    String  @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order Order? @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
+
+model Event {
+  id         String   @id @default(uuid())
+  orderId    String
+  title      String
+  start      DateTime
+  allaDay    Boolean
+  timeFormat String
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  @@index([orderId])
 }
