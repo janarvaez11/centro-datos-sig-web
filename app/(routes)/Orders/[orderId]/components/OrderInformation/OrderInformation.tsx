@@ -2,6 +2,7 @@ import { User } from "lucide-react";
 import { OrderInformationProps } from "./OrderInformation.types";
 import Image from "next/image";
 import { OrderForm } from "../OrderForm";
+import { NewContact } from "../NewContact";
 
 export function OrderInformation(props: OrderInformationProps) {
 
@@ -27,7 +28,7 @@ export function OrderInformation(props: OrderInformationProps) {
                     </div>
                     <div>
                         {/* TODO: NUEVO CONTACTO */}
-                        <p>Nuevo Contacto</p>
+                        <NewContact/>
                     </div>
 
                 </div>
