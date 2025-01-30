@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog"
+import { FormContact } from "./FormContact"
 
 
 
@@ -24,7 +25,7 @@ export function NewContact(){
                     <DialogTitle>Agregar un Responsable</DialogTitle>
                     <DialogDescription>Crear los responsables de la inspección</DialogDescription>
                 </DialogHeader>
-                <p>Form Contact</p>
+                <FormContact setOpen={setOpen}/>
             </DialogContent>
 
         </Dialog>

@@ -32,3 +32,28 @@ export async function PATCH(
     }
 
 }
+ 
+export async function DELETE(req: Request, {params}: {params: {orderId: string}}){
+    try {
+        const {userId} = auth()
+        const {orderId} = params
+
+        if(!userId){
+            return new NextResponse("Unauthorized", {status: 401})
+        }
+
+        const deletedOrder = await db.order.delete({
+            where:{
+                id: orderId,
+
+            },
+        });
+
+        return NextResponse.json(deletedOrder);
+
+        
+    } catch (error) {
+        console.log("[DELETE ORDER ID]", error)
+        return new NextResponse("Error Interno", {status:500})
+    }
+}

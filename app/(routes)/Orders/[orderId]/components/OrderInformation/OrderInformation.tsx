@@ -3,6 +3,7 @@ import { OrderInformationProps } from "./OrderInformation.types";
 import Image from "next/image";
 import { OrderForm } from "../OrderForm";
 import { NewContact } from "../NewContact";
+import { ListContacts } from "../ListContacts";
 
 export function OrderInformation(props: OrderInformationProps) {
 
@@ -32,7 +33,7 @@ export function OrderInformation(props: OrderInformationProps) {
                     </div>
 
                 </div>
-                <p>Lista de Conctatos</p>
+                <ListContacts order={order}/>
 
             </div>
 
