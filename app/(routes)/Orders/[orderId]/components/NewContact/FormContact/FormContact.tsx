@@ -52,7 +52,7 @@ export function FormContact(props: FormContactProps) {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             axios.post(`/api/order/${params.orderId}/contact`, values)
-            toast({title: "Responsables agregados"})
+            toast({ title: "Responsables agregados" })
             router.refresh()
             setOpen(false)
         } catch (error) {
@@ -82,6 +82,21 @@ export function FormContact(props: FormContactProps) {
 
 
                 <FormField control={form.control}
+                    name="code"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Código Colaborador:</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Ej: 1111r" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+
+
+                <FormField control={form.control}
                     name="role"
                     render={({ field }) => (
                         <FormItem>
@@ -91,7 +106,7 @@ export function FormContact(props: FormContactProps) {
                                 defaultValue={field.value}>
                                 <FormControl>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Seleccion el cargo" />
+                                        <SelectValue placeholder="Seleccione el cargo" />
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -110,17 +125,33 @@ export function FormContact(props: FormContactProps) {
 
 
                 <FormField control={form.control}
-                    name="code"
+                    name="function"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Código Colaborado:</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Ej: 1111r" {...field} />
-                            </FormControl>
-                            <FormMessage />
+                            <FormLabel>Función:</FormLabel>
+                            <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Seleccione la función" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="Responsable del Area Inspeccionada">Responsable del Area Inspeccionada</SelectItem>
+                                    <SelectItem value="Responsable de Asistir">Responsable de Asistir</SelectItem>
+                                    <SelectItem value="Responsable de la Inspeccion">Responsable de la Inspección</SelectItem>
+                                    <SelectItem value="Responsable de Aprobar">Responsable de Aprobar</SelectItem>
+                                </SelectContent>
+
+                                <FormMessage />
+
+                            </Select>
                         </FormItem>
                     )}
                 />
+
+
 
                 <Button type="submit">Guardar Responsables</Button>
 
