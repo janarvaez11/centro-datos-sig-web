@@ -4,7 +4,7 @@ import SidebarRoutes from "../SidebarRoutes/SidebarRoutes";
 export function Sidebar() {
     return (
         <div className="h-screen">
-            <div className="h-full flex flex-col border-r">
+            <div className="h-full flex flex-col border-r overflow-y-auto">
                 <Logo/>
                 <SidebarRoutes/>
 

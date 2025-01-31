@@ -10,6 +10,7 @@ import Image from "next/image"
 
 
 export const columns: ColumnDef<Order>[] = [
+    /*
     {
         accessorKey: "profileImage",
         header: "Imagen",
@@ -23,6 +24,7 @@ export const columns: ColumnDef<Order>[] = [
             )
         }
     },
+    */
     {
         accessorKey: "order",
         header: ({ column }) => {
@@ -48,18 +50,6 @@ export const columns: ColumnDef<Order>[] = [
         header: "Fecha Programada",
     },
     {
-        accessorKey: "procesoProduccion",
-        header: "Proceso de Produccion",
-    },
-    {
-        accessorKey: "especificacionProceso",
-        header: "Especificacion de Proceso",
-    },
-    {
-        accessorKey: "responsableCT",
-        header: "Responsable Centro Trabajo",
-    },
-    {
         accessorKey: "responsableInspeccion",
         header: "Responsable de Inspección",
     },
@@ -74,10 +64,6 @@ export const columns: ColumnDef<Order>[] = [
     {
         accessorKey: "fig",
         header: "Fig",
-    },
-    {
-        accessorKey: "proyecto",
-        header: "Proyecto",
     },
     {
         accessorKey: "area",

@@ -12,7 +12,7 @@ export default function SidebarRoutes() {
     return (
         <div className="flex flex-col justify-between h-full">
             <div>
-                <div className="p-2 md:p-6">
+                <div className="p-2 md:p-3">
                     <p className="text-slate-500 mb-2">General</p>
                     {dataGeneralSidebar.map((item) => (
                         <SiderbarItem key={item.label} item={item} />
@@ -21,7 +21,7 @@ export default function SidebarRoutes() {
 
                 <Separator />
 
-                <div className="p-2 md:p-6">
+                <div className="p-2 md:p-3">
                     <p className="text-slate-500 mb-2">Tools</p>
                     {dataToolsSidebar.map((item) => (
                         <SiderbarItem key={item.label} item={item} />
@@ -30,7 +30,7 @@ export default function SidebarRoutes() {
 
                 <Separator />
 
-                <div className="p-2 md:p-6">
+                <div className="p-2 md:p-3">
                     <p className="text-slate-500 mb-2">Soporte</p>
                     {dataSupportSideBar.map((item) => (
                         <SiderbarItem key={item.label} item={item} />
@@ -41,9 +41,9 @@ export default function SidebarRoutes() {
 
 
             <div>
-                <div className="text-center p-6">
+                <div className="text-center p-3">
                     <Button variant="outline" className="w-full">
-                        Upgrade Plan
+                        Contacto
                     </Button>
                 </div>
 

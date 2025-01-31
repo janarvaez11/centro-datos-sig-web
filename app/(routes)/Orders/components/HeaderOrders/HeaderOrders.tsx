@@ -29,7 +29,7 @@ export function HeaderOrders() {
                 <DialogTrigger asChild>
                     <Button>Crear Orden</Button>
                 </DialogTrigger>
-                <DialogContent className="sm:mac-w-[625px]">
+                <DialogContent className="sm:max-w-[900px]">
                     <DialogHeader>
                         <DialogTitle>
                             Crear Orden
