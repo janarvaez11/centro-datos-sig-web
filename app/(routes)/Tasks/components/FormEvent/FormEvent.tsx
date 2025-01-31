@@ -87,20 +87,35 @@ export function FormEvent(props: FormEventProps) {
 
                 />
                 <FormField
-                control={form.control}
-                name="orderSelected.name"
-                render={({field}) => (
-                    <FormItem>
-                        <FormLabel>Nombre de la Orden</FormLabel>
+                    control={form.control}
+                    name="orderSelected.name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Nombre de la Orden</FormLabel>
+                            <Select onValueChange={(newValue) => {
+                                field.onChange(newValue)
+                                handleOrderChange(newValue)
+                            }} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Seleccione la orden" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {orders.map((order) => (
+                                        <SelectItem key={order.id} value={order.order}>
+                                            {order.order}
+                                        </SelectItem>
+                                    ))}
 
-                    </FormItem>
-                )}
+                                </SelectContent>
+                            </Select>
+                            <FormMessage/>
 
-
-                
-                
-                
+                        </FormItem>
+                    )}
                 />
+                <Button type="submit">Crear evento</Button>
 
 
             </form>

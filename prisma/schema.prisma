@@ -65,7 +65,7 @@ model Event {
   orderId    String
   title      String
   start      DateTime
-  allaDay    Boolean
+  allDay     Boolean
   timeFormat String
 
   order Order @relation(fields: [orderId], references: [id])

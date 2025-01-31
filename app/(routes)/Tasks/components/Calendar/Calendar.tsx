@@ -22,6 +22,7 @@ import { CalendarProps } from "./Calendar.types";
 import { currentUser } from "@clerk/nextjs";
 import { Leaf } from "lucide-react";
 import { ModalAddEvent } from "../ModalAddEvent";
+import { title } from "process";
 
 export function Calendar(props: CalendarProps) {
 
@@ -39,13 +40,73 @@ export function Calendar(props: CalendarProps) {
         }
     })
 
+
+
     const handleDateClick = async (selected: DateSelectArg) => {
         setOpen(true)
         setSelectItem(selected)
-
     }
 
-    const handleEventClick = () => {
+
+
+    useEffect(()=> {
+        if(onSaveNewEvent && selectedItem?.view.calendar){
+            const calendarApi = selectedItem.view.calendar
+            calendarApi.unselect()
+
+
+            const newEventPrisma = {
+                orderId: newEvent.orderSelected.id,
+                title: newEvent.eventName,
+                start: new Date(selectedItem.start),
+                allDay: false,
+                timeFormat: 'H(:mm)'
+            }
+
+            axios.post(`/api/order/${newEvent.orderSelected.id}/event`, newEventPrisma)
+            .then(()=>{
+                toast({title: "Evento Creado"})
+                router.refresh()
+            
+            })
+            .catch(error =>{
+                toast({
+                    title: "Error al crear el evento",
+                    variant: "destructive"
+                })
+            })
+
+            setNewEvent({
+                eventName: "",
+                orderSelected:{
+                    name: "",
+                    id: ""
+                }
+            })
+            setOnSaveNewEvent(false)
+        }
+        //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [onSaveNewEvent, selectedItem, event])
+
+    const handleEventClick = async (selected: any) => {
+        if(window.confirm(
+            `Desea realmente borrar este evento ${selected.event.title}` 
+        )){
+            try {
+                await axios.delete(`/api/event/${selected.event._def.publicId}`)
+                toast({title: "Evento borrado"})
+                router.refresh()
+
+                
+            } catch (error) {
+                toast({
+                    title: "Error",
+                    variant: "destructive"
+                })
+                
+            }
+        }
+
 
     }
 
