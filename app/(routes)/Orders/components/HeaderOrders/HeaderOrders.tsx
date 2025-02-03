@@ -15,32 +15,47 @@ import {
 import { CirclePlus } from "lucide-react"
 import { SetStateAction, useState } from "react"
 import { FormCreateOrder } from "../FormCreateOrder"
+import { FormContact } from "../../[orderId]/components/NewContact/FormContact"
 
 
 export function HeaderOrders() {
 
+
     const [openModalCreate, setOpenModalCreate] = useState(false)
+
+    {/*PARA CREAR RESPONSABLES*/ }
+    const [open, setOpen] = useState(false)
+
 
     return (
         <div className="flex justify-between items-center">
-            <h2 className="text-2xl">Lista de Ordenes</h2>
+            <h2 className="text-2xl">Planificación de Inspecciones</h2>
 
             <Dialog open={openModalCreate} onOpenChange={setOpenModalCreate}>
                 <DialogTrigger asChild>
                     <Button>Crear Orden</Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[900px]">
+                <DialogContent className="sm:max-w-[1500px]">
                     <DialogHeader>
                         <DialogTitle>
                             Crear Orden
                         </DialogTitle>
                         <DialogDescription>
-                            Ingresar los datos de la orden de Inspección
+                            Información General
                         </DialogDescription>
                     </DialogHeader>
 
-                    <FormCreateOrder setOpenModalCreate={setOpenModalCreate}/>
+                    {/*Para crear una orden*/}
+                    <FormCreateOrder setOpenModalCreate={setOpenModalCreate} />
 
+
+                    {/*
+                    <DialogDescription>
+                        Responsables de la Inspección
+                    </DialogDescription>
+                    Para crear responsables
+                    <FormContact setOpen={setOpen} />
+                    */}
                 </DialogContent>
             </Dialog>
         </div>

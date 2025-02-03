@@ -40,6 +40,28 @@ export const columns: ColumnDef<Order>[] = [
     {
         accessorKey: "estado",
         header: "Estado",
+        cell: ({ row }) => {
+            const estado = row.getValue("estado") as string; // Aseguramos que 'estado' es un string
+            
+            let backgroundColor = "";
+            let textColor = "text-white"; // Para el color del texto
+        
+            // Asignamos el color de fondo y texto según el estado
+            if (estado === "Abierto") {
+                backgroundColor = "bg-green-500"; // Verde
+            } else if (estado === "Cerrado") {
+                backgroundColor = "bg-yellow-500"; // Amarillo
+                textColor = "text-black"; // Texto negro para contraste
+            } else if (estado === "Cancelado") {
+                backgroundColor = "bg-red-500"; // Rojo
+            }
+        
+            return (
+                <div className={`py-1 px-3 rounded-lg ${backgroundColor} ${textColor}`}>
+                    {estado}
+                </div>
+            );
+        }
     },
     {
         accessorKey: "tipoInspeccion",

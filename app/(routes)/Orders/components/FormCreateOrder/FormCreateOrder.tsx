@@ -6,6 +6,15 @@ import { useForm } from "react-hook-form"
 
 import axios from "axios"
 
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+
 
 import { Button } from "@/components/ui/button"
 import {
@@ -17,6 +26,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+
 import { Input } from "@/components/ui/input"
 
 import { useRef, useState } from "react"
@@ -26,6 +36,9 @@ import { title } from "process"
 import { Toast } from "@/components/ui/toast"
 import { toast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
+import { Separator } from "@radix-ui/react-separator"
+
+import { useEffect } from "react"
 
 
 const formSchema = z.object({
@@ -52,6 +65,40 @@ const formSchema = z.object({
 
 
 export function FormCreateOrder(props: FormCreateOrderProps) {
+
+    {/*PARA GENERA EL NUMERO DE ORDEN */ }
+    const [order, setOrderNumber] = useState("");
+
+
+    {/*Crear una función para obtener el último número de orden*/ }
+    useEffect(() => {
+        const fetchNextOrderNumber = async () => {
+            try {
+                const response = await axios.get("/api/order/last"); // Obtiene la última orden
+                const lastOrder = response.data?.order || "ODI00000";
+    
+                // Si la respuesta indica que no hay órdenes, inicializa con ODI00001
+                const nextOrder = lastOrder === "ODI00000" ? "ODI00001" : `ODI${String(parseInt(lastOrder.replace("ODI", ""), 10) + 1).padStart(5, "0")}`;
+    
+                console.log("Nuevo número de orden generado:", nextOrder);
+    
+                setOrderNumber(nextOrder);  // Actualiza el estado del número de orden
+                form.setValue("order", nextOrder, { shouldValidate: true });
+    
+            } catch (error) {
+                console.error("Error obteniendo el número de orden:", error);
+                setOrderNumber("ODI00001");
+                form.setValue("order", "ODI00001", { shouldValidate: true });
+            }
+        };
+    
+        fetchNextOrderNumber();
+    }, []);
+    
+
+
+
+
 
     const { setOpenModalCreate } = props
 
@@ -123,7 +170,6 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                     loteInspeccion: values.lote,
                 }),
             })
-
             if (response.ok) {
                 toast({ title: "Datos enviados correctamente a Power Automate y SharePoint" })
             } else {
@@ -140,7 +186,7 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                 variant: "destructive"
             })
 
-        }
+        }   
     }
 
     return (
@@ -148,7 +194,7 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
 
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-6 gap-3">
 
                         <FormField
                             control={form.control}
@@ -157,12 +203,14 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                                 <FormItem>
                                     <FormLabel>Número de Orden</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ej: DOIXXXXX" type="text" {...field} />
+                                        <Input readOnly {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+
+
 
                         <FormField
                             control={form.control}
@@ -297,106 +345,6 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
 
                         <FormField
                             control={form.control}
-                            name="responsableCT"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Responsable CT Inspeccionado</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Ej: 1111" type="number" {...field} />
-                                    </FormControl>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="responsableInspeccion"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Responsable Inspección</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Ej: 1111" type="number" {...field} />
-                                    </FormControl>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-
-                        <FormField
-                            control={form.control}
-                            name="instrumentoMedicion"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Instrumento de Medición</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Seleccione el instrumento" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="Flexometro">Flexómetro</SelectItem>
-                                            <SelectItem value="Micrometro">Micrómetro</SelectItem>
-                                            <SelectItem value="Medidor especial">Medidor Especial</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="codigoInstrumento"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Código del Instrumento</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="ABC123" type="text" {...field} />
-                                    </FormControl>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="lote"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Cantidad de Lote</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Ej: 0000" type="number" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="muestra"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Muestra</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="2000" type="number" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
                             name="cliente"
                             render={({ field }) => (
                                 <FormItem>
@@ -493,6 +441,146 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                             )}
                         />
 
+                        <FormField
+                            control={form.control}
+                            name="lote"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Cantidad de Lote</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Ej: 0000" type="number" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="muestra"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Muestra</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="2000" type="number" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <Separator />
+                        <Separator />
+                        <Separator />
+                        <Separator />
+
+
+
+                        <DialogHeader>
+                            <DialogTitle>
+                                Responsables
+                            </DialogTitle>
+                            <DialogDescription>
+                                Ingrese la información de los responsables
+                            </DialogDescription>
+                        </DialogHeader>
+                        <Separator />
+                        <Separator />
+                        <Separator />
+                        <Separator />
+                        <Separator />
+
+                        <FormField
+                            control={form.control}
+                            name="responsableCT"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Responsable CT Inspeccionado</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Ej: 1111" type="number" {...field} />
+                                    </FormControl>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="responsableInspeccion"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Responsable Inspección</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Ej: 1111" type="number" {...field} />
+                                    </FormControl>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <Separator />
+                        <Separator />
+                        <Separator />
+                        <Separator />
+
+
+
+                        <DialogHeader>
+                            <DialogTitle>
+                                Instrumentos de Medición
+                            </DialogTitle>
+                            <DialogDescription>
+                                Ingrese la Información de los instrumentos de Medición
+                            </DialogDescription>
+                        </DialogHeader>
+                        <Separator />
+                        <Separator />
+                        <Separator />
+                        <Separator />
+                        <Separator />
+
+
+                        <FormField
+                            control={form.control}
+                            name="instrumentoMedicion"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Instrumento de Medición</FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Seleccione el instrumento" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Flexometro">Flexómetro</SelectItem>
+                                            <SelectItem value="Micrometro">Micrómetro</SelectItem>
+                                            <SelectItem value="Medidor especial">Medidor Especial</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="codigoInstrumento"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Código del Instrumento</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="ABC123" type="text" {...field} />
+                                    </FormControl>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
 
                     </div>

@@ -45,7 +45,8 @@ export function FormContact(props: FormContactProps) {
         defaultValues: {
             name: "",
             role: "",
-            code: ""
+            code: "",
+            function: ""
         }
     })
 

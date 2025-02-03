@@ -73,11 +73,19 @@ export function DataTable<TData, TValue>({
     return (
         <div className="p-4 bg-background shadow-md rounded-lg mt-4">
 
-            <div className="flex items-center mb-2">
+            <div className="flex items-center space-x-4 mb-2">
                 <Input
                     placeholder="Filtrar la orden"
                     value={(table.getColumn("order")?.getFilterValue() as string) ?? ""}
                     onChange={(event) => table.getColumn("order")?.setFilterValue(event.target.value)}
+                />
+   
+                <input
+                    type="date"  // Cambiado a 'date' para poder seleccionar la fecha
+                    placeholder="Filtrar por fecha"
+                    value={(table.getColumn("fechaProgramada")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) => table.getColumn("fechaProgramada")?.setFilterValue(event.target.value)}
+                    className="border p-2 rounded"
                 />
             </div>
 
@@ -123,10 +131,10 @@ export function DataTable<TData, TValue>({
 
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                <Button variant="outline" size="sm" onClick={()=> table.previousPage()} disabled={!table.getCanPreviousPage()}>
+                <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
                     Anterior
                 </Button>
-                <Button variant="outline" size="sm" onClick={()=> table.nextPage()} disabled={!table.getCanNextPage()}>
+                <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
                     Siguiente
                 </Button>
 

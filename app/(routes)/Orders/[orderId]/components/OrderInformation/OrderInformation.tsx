@@ -25,10 +25,10 @@ export function OrderInformation(props: OrderInformationProps) {
                 <div className="flex items-center justify-between gap-x-2">
                     <div className="flex items-center gap-x-2">
                         <User className="w-5 h-5" />
-                        Contactos
+                        Responsables
                     </div>
                     <div>
-                        {/* TODO: NUEVO CONTACTO */}
+                        {/* TO DO: NUEVO CONTACTO */}
                         <NewContact/>
                     </div>
 
