@@ -81,15 +81,15 @@ export function HeaderOrders() {
                     </DialogHeader>
                     {orderId && (
                         <FormContact
-                        setOpen={setOpenResponsiblesModal}
-                        orderId={orderId}
-                        onResponsibleAdded={() => {
-                            setResponsiblesCount((prev) => prev + 1);
-                            if (responsiblesCount + 1 === 4) {
-                                setOpenResponsiblesModal(false);
-                            }
-                        }}
-                    />
+                            setOpen={setOpenResponsiblesModal}
+                            orderId={orderId}
+                            onResponsibleAdded={() => {
+                                setResponsiblesCount((prev) => prev + 1);
+                                if (responsiblesCount + 1 === 4) {
+                                    setOpenResponsiblesModal(false);
+                                }
+                            }}
+                        />
                     )}
 
                 </DialogContent>

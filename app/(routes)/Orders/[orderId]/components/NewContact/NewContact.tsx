@@ -13,7 +13,7 @@ export function NewContact(){
     const [open, setOpen] = useState(false)
 
     return(
-   
+
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button>
@@ -25,9 +25,10 @@ export function NewContact(){
                     <DialogTitle>Agregar un Responsable</DialogTitle>
                     <DialogDescription>Crear los responsables de la inspección</DialogDescription>
                 </DialogHeader>
-                <FormContact setOpen={setOpen}/>
+                {/* <FormContact setOpen={setOpen}/> */}
             </DialogContent>
 
         </Dialog>
+
     )
 }
