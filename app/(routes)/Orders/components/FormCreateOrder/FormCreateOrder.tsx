@@ -66,6 +66,7 @@ const formSchema = z.object({
 
 export function FormCreateOrder(props: FormCreateOrderProps) {
 
+
     {/*PARA GENERA EL NUMERO DE ORDEN */ }
     const [order, setOrderNumber] = useState("");
 
@@ -76,25 +77,25 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
             try {
                 const response = await axios.get("/api/order/last"); // Obtiene la última orden
                 const lastOrder = response.data?.order || "ODI00000";
-    
+
                 // Si la respuesta indica que no hay órdenes, inicializa con ODI00001
                 const nextOrder = lastOrder === "ODI00000" ? "ODI00001" : `ODI${String(parseInt(lastOrder.replace("ODI", ""), 10) + 1).padStart(5, "0")}`;
-    
+
                 console.log("Nuevo número de orden generado:", nextOrder);
-    
+
                 setOrderNumber(nextOrder);  // Actualiza el estado del número de orden
                 form.setValue("order", nextOrder, { shouldValidate: true });
-    
+
             } catch (error) {
                 console.error("Error obteniendo el número de orden:", error);
                 setOrderNumber("ODI00001");
                 form.setValue("order", "ODI00001", { shouldValidate: true });
             }
         };
-    
+
         fetchNextOrderNumber();
     }, []);
-    
+
 
 
 
@@ -139,6 +140,7 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             axios.post("/api/order", values)
+
             toast({ title: "Orden Creada Correctamente" })
 
 
@@ -180,13 +182,14 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
 
             router.refresh()
             setOpenModalCreate(false)
+
         } catch (error) {
             Toast({
                 title: "Something went wrong",
                 variant: "destructive"
             })
 
-        }   
+        }
     }
 
     return (
@@ -474,7 +477,6 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                         <Separator />
 
 
-
                         <DialogHeader>
                             <DialogTitle>
                                 Responsables
@@ -488,6 +490,7 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                         <Separator />
                         <Separator />
                         <Separator />
+
 
                         <FormField
                             control={form.control}
@@ -503,6 +506,82 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                                 </FormItem>
                             )}
                         />
+                        {/* 
+                        <FormField control={form.control}
+                            name="cargoResponsable"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Cargo:</FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Seleccione el cargo" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Supervisor">Supervisor</SelectItem>
+                                            <SelectItem value="Auditor">Auditor</SelectItem>
+                                            <SelectItem value="Rol 1">Rol 1 </SelectItem>
+                                            <SelectItem value="Rol 2">Rol 2</SelectItem>
+                                        </SelectContent>
+
+                                        <FormMessage />
+
+                                    </Select>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField control={form.control}
+                            name="funcionResponsable"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Función:</FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Seleccione la función" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Responsable del Area Inspeccionada">Responsable del Area Inspeccionada</SelectItem>
+                                            <SelectItem value="Responsable de Asistir">Responsable de Asistir</SelectItem>
+                                            <SelectItem value="Responsable de la Inspeccion">Responsable de la Inspección</SelectItem>
+                                            <SelectItem value="Responsable de Aprobar">Responsable de Aprobar</SelectItem>
+                                        </SelectContent>
+
+                                        <FormMessage />
+
+                                    </Select>
+                                </FormItem>
+                            )}
+                        />
+
+
+
+
+
+
+                        <FormField
+                            control={form.control}
+                            name="nombreResponsableInspeccion"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Nombre del responsable de la Inspección</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Ej: 1111" type="text" {...field} />
+                                    </FormControl>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        */}
+
                         <FormField
                             control={form.control}
                             name="responsableInspeccion"
@@ -510,7 +589,7 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                                 <FormItem>
                                     <FormLabel>Responsable Inspección</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ej: 1111" type="number" {...field} />
+                                        <Input placeholder="Ej: 1111" type="text" {...field} />
                                     </FormControl>
 
                                     <FormMessage />
@@ -518,10 +597,13 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                             )}
                         />
 
+
+
                         <Separator />
                         <Separator />
                         <Separator />
                         <Separator />
+
 
 
 

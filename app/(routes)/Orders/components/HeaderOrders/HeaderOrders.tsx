@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button"
 
-
 import {
     Dialog,
     DialogContent,
@@ -23,18 +22,26 @@ export function HeaderOrders() {
 
     const [openModalCreate, setOpenModalCreate] = useState(false)
 
+
+
+
     {/*PARA CREAR RESPONSABLES*/ }
     const [open, setOpen] = useState(false)
+
 
 
     return (
         <div className="flex justify-between items-center">
             <h2 className="text-2xl">Planificación de Inspecciones</h2>
 
+
+            {/* Modal para Crear Orden */}
             <Dialog open={openModalCreate} onOpenChange={setOpenModalCreate}>
                 <DialogTrigger asChild>
                     <Button>Crear Orden</Button>
                 </DialogTrigger>
+
+
                 <DialogContent className="sm:max-w-[1500px]">
                     <DialogHeader>
                         <DialogTitle>
@@ -48,16 +55,13 @@ export function HeaderOrders() {
                     {/*Para crear una orden*/}
                     <FormCreateOrder setOpenModalCreate={setOpenModalCreate} />
 
-
-                    {/*
-                    <DialogDescription>
-                        Responsables de la Inspección
-                    </DialogDescription>
-                    Para crear responsables
-                    <FormContact setOpen={setOpen} />
-                    */}
                 </DialogContent>
+
             </Dialog>
+
+
+
+
         </div>
     )
 }
