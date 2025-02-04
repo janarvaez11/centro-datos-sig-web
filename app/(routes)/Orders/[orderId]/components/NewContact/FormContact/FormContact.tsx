@@ -35,7 +35,10 @@ import { toast } from "@/hooks/use-toast"
 
 export function FormContact(props: FormContactProps) {
 
-    const { setOpen } = props
+    //const { setOpen } = props
+
+    const { setOpen, orderId } = props; // Recibe el ID de la orden
+
 
     const params = useParams<{ orderId: string }>()
     const router = useRouter()
@@ -52,10 +55,15 @@ export function FormContact(props: FormContactProps) {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
+            await axios.post(`/api/order/${orderId}/contact`, values); // Usa el ID de la orden
+            toast({ title: "Responsable agregado" });
+            form.reset(); // Limpia el formulario después de guardar
+            {/* 
             axios.post(`/api/order/${params.orderId}/contact`, values)
             toast({ title: "Responsables agregados" })
             router.refresh()
             setOpen(false)
+            */}
         } catch (error) {
             toast({
                 title: "Error presente",

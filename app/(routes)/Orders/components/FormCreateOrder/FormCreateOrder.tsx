@@ -97,11 +97,8 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
     }, []);
 
 
-
-
-
-
-    const { setOpenModalCreate } = props
+    //const { setOpenModalCreate} = props
+    const { setOpenModalCreate, setOpen, setOrderId } = props
 
     const router = useRouter()
 
@@ -139,7 +136,10 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
     // 2. Define a submit handler.
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            axios.post("/api/order", values)
+            //axios.post("/api/order", values)
+            const responseOrder = await axios.post("/api/order", values);
+            const orderId = responseOrder.data.id; // Suponiendo que el backend devuelve el ID
+
 
             toast({ title: "Orden Creada Correctamente" })
 
@@ -179,6 +179,10 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
             }
 
 
+
+           // Abre el modal de responsables y pasa el ID de la orden
+           setOrderId(orderId); // Actualiza el orderId
+           setOpen(true); // Abre el modal de responsables
 
             router.refresh()
             setOpenModalCreate(false)
