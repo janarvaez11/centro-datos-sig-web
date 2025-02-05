@@ -48,10 +48,6 @@ const formSchema = z.object({
     fechaProgramada: z.string().min(2),
     procesoProduccion: z.string().min(2),
     especificacionProceso: z.string().min(2),
-    responsableCT: z.string().min(2),
-    responsableInspeccion: z.string().min(2),
-    instrumentoMedicion: z.string().min(2),
-    codigoInstrumento: z.string().min(2),
     muestra: z.string().min(2),
     cliente: z.string().min(2),
     fig: z.string().min(2),
@@ -114,10 +110,6 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
             fechaProgramada: "",
             procesoProduccion: "",
             especificacionProceso: "",
-            responsableCT: "",
-            responsableInspeccion: "",
-            instrumentoMedicion: "",
-            codigoInstrumento: "",
             muestra: "",
             cliente: "",
             fig: "",
@@ -158,10 +150,6 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                     fechaInspeccion: values.fechaProgramada,
                     procesoProduccionInspeccion: values.procesoProduccion,
                     procesoEspecificacionInspeccion: values.especificacionProceso,
-                    ctInspeccion: values.responsableCT,
-                    responsableInspeccion: values.responsableInspeccion,
-                    instrumentoMedicion: values.instrumentoMedicion,
-                    codigoInstrumento: values.codigoInstrumento,
                     muestraInspeccion: values.muestra,
                     clienteInspeccion: values.cliente,
                     proyectoInspeccion: values.proyecto,
@@ -201,7 +189,7 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
 
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <div className="grid grid-cols-6 gap-3">
+                    <div className="grid grid-cols-4 gap-3">
 
                         <FormField
                             control={form.control}
@@ -471,198 +459,6 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                                     <FormControl>
                                         <Input placeholder="2000" type="number" {...field} />
                                     </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <Separator />
-                        <Separator />
-                        <Separator />
-                        <Separator />
-
-
-                        <DialogHeader>
-                            <DialogTitle>
-                                Responsables
-                            </DialogTitle>
-                            <DialogDescription>
-                                Ingrese la información de los responsables
-                            </DialogDescription>
-                        </DialogHeader>
-                        <Separator />
-                        <Separator />
-                        <Separator />
-                        <Separator />
-                        <Separator />
-
-
-                        <FormField
-                            control={form.control}
-                            name="responsableCT"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Responsable CT Inspeccionado</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Ej: 1111" type="number" {...field} />
-                                    </FormControl>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        {/* 
-                        <FormField control={form.control}
-                            name="cargoResponsable"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Cargo:</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}>
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Seleccione el cargo" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="Supervisor">Supervisor</SelectItem>
-                                            <SelectItem value="Auditor">Auditor</SelectItem>
-                                            <SelectItem value="Rol 1">Rol 1 </SelectItem>
-                                            <SelectItem value="Rol 2">Rol 2</SelectItem>
-                                        </SelectContent>
-
-                                        <FormMessage />
-
-                                    </Select>
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField control={form.control}
-                            name="funcionResponsable"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Función:</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}>
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Seleccione la función" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="Responsable del Area Inspeccionada">Responsable del Area Inspeccionada</SelectItem>
-                                            <SelectItem value="Responsable de Asistir">Responsable de Asistir</SelectItem>
-                                            <SelectItem value="Responsable de la Inspeccion">Responsable de la Inspección</SelectItem>
-                                            <SelectItem value="Responsable de Aprobar">Responsable de Aprobar</SelectItem>
-                                        </SelectContent>
-
-                                        <FormMessage />
-
-                                    </Select>
-                                </FormItem>
-                            )}
-                        />
-
-
-
-
-
-
-                        <FormField
-                            control={form.control}
-                            name="nombreResponsableInspeccion"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Nombre del responsable de la Inspección</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Ej: 1111" type="text" {...field} />
-                                    </FormControl>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        */}
-
-                        <FormField
-                            control={form.control}
-                            name="responsableInspeccion"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Responsable Inspección</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Ej: 1111" type="text" {...field} />
-                                    </FormControl>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-
-
-                        <Separator />
-                        <Separator />
-                        <Separator />
-                        <Separator />
-
-
-
-
-                        <DialogHeader>
-                            <DialogTitle>
-                                Instrumentos de Medición
-                            </DialogTitle>
-                            <DialogDescription>
-                                Ingrese la Información de los instrumentos de Medición
-                            </DialogDescription>
-                        </DialogHeader>
-                        <Separator />
-                        <Separator />
-                        <Separator />
-                        <Separator />
-                        <Separator />
-
-
-                        <FormField
-                            control={form.control}
-                            name="instrumentoMedicion"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Instrumento de Medición</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Seleccione el instrumento" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="Flexometro">Flexómetro</SelectItem>
-                                            <SelectItem value="Micrometro">Micrómetro</SelectItem>
-                                            <SelectItem value="Medidor especial">Medidor Especial</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="codigoInstrumento"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Código del Instrumento</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="ABC123" type="text" {...field} />
-                                    </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}

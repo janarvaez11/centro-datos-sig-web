@@ -15,6 +15,7 @@ import { CirclePlus } from "lucide-react"
 import { SetStateAction, useState } from "react"
 import { FormCreateOrder } from "../FormCreateOrder"
 import { FormContact } from "../../[orderId]/components/NewContact/FormContact"
+import { FormTool } from "../../[orderId]/components/NewTool/FormTool"
 
 
 export function HeaderOrders() {
@@ -22,10 +23,18 @@ export function HeaderOrders() {
 
     const [openModalCreate, setOpenModalCreate] = useState(false)
 
+    {/*PARA RESPONSABLES*/ }
     const [openResponsiblesModal, setOpenResponsiblesModal] = useState(false);
     const [orderId, setOrderId] = useState<string | null>(null); // Estado para el ID de la orden
 
     const [responsiblesCount, setResponsiblesCount] = useState(0);
+
+
+    {/*PARA HERRAMIENTAS*/ }
+    const [openToolsModal, setOpenToolsModal] = useState(false);
+
+    const [toolsCount, setToolsCount] = useState(0);
+
 
 
     {/*PARA CREAR RESPONSABLES*/ }
@@ -45,7 +54,7 @@ export function HeaderOrders() {
                 </DialogTrigger>
 
 
-                <DialogContent className="sm:max-w-[1500px]">
+                <DialogContent className="sm:max-w-[1200px]">
                     <DialogHeader>
                         <DialogTitle>
                             Crear Orden
@@ -87,6 +96,33 @@ export function HeaderOrders() {
                                 setResponsiblesCount((prev) => prev + 1);
                                 if (responsiblesCount + 1 === 4) {
                                     setOpenResponsiblesModal(false);
+                                }
+                            }}
+                        />
+                    )}
+
+                </DialogContent>
+            </Dialog>
+
+
+
+            {/* Modal para Instrumentos */}
+            <Dialog open={openToolsModal} onOpenChange={setOpenToolsModal}>
+                <DialogContent className="sm:max-w-[500px]">
+                    <DialogHeader>
+                        <DialogTitle>Registrar Responsables</DialogTitle>
+                        <DialogDescription>
+                            Ingrese la información de los 4 responsables.
+                        </DialogDescription>
+                    </DialogHeader>
+                    {orderId && (
+                        <FormTool
+                            setOpen={setOpenToolsModal}
+                            orderId={orderId}
+                            onResponsibleAdded={() => {
+                                setToolsCount((prev) => prev + 1);
+                                if (toolsCount + 1 === 4) {
+                                    setOpenToolsModal(false);
                                 }
                             }}
                         />
