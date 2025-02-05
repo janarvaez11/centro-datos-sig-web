@@ -52,10 +52,6 @@ export function OrderForm(props: OrderFormsProps) {
             fechaProgramada: order.fechaProgramada,
             procesoProduccion: order.procesoProduccion,
             especificacionProceso: order.especificacionProceso,
-            responsableCT: order.responsableCT,
-            responsableInspeccion: order.responsableInspeccion,
-            instrumentoMedicion: order.instrumentoMedicion,
-            codigoInstrumento: order.codigoInstrumento,
             muestra: order.muestra,
             cliente: order.cliente,
             fig: order.fig,
@@ -237,77 +233,6 @@ export function OrderForm(props: OrderFormsProps) {
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    {/* RESPONSABLE CT */}
-                    <FormField
-                        control={form.control}
-                        name="responsableCT"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Responsable del Centro de Trabajo</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Codigo Colaborador" type="number" {...field} />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-
-                    {/* RESPONSABLE INSPECCION*/}
-                    <FormField
-                        control={form.control}
-                        name="responsableInspeccion"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Responsable de la Inspección</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Codigo Auditor" type="number" {...field} />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-
-                    {/*INSTRUMENTO MEDICION*/}
-                    <FormField
-                        control={form.control}
-                        name="instrumentoMedicion"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Instrumento de Medición</FormLabel>
-                                <Select
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                >
-
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Seleccione el instrumento" />
-                                        </SelectTrigger>
-                                    </FormControl>
-
-                                    <SelectContent>
-                                        <SelectItem value="Flexometro">Flexómetro</SelectItem>
-                                        <SelectItem value="Micrometro">Micrómetro</SelectItem>
-                                        <SelectItem value="Medidor especial">Medidor Especial</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    {/* CODIGO INSTRUMENTO MEDICION*/}
-                    <FormField
-                        control={form.control}
-                        name="codigoInstrumento"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Código del Instrumento utilizado</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Codigo " type="text" {...field} />
-                                </FormControl>
                             </FormItem>
                         )}
                     />
