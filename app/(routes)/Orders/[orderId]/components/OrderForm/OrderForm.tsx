@@ -59,7 +59,9 @@ export function OrderForm(props: OrderFormsProps) {
             area: order.area,
             designacion: order.designacion,
             norma: order.norma,
-            lote: order.lote
+            lote: order.lote,
+            nivelInspeccion: order.nivelInspeccion,
+            planMuestra: order.planMuestra
 
         }
     })
@@ -160,6 +162,33 @@ export function OrderForm(props: OrderFormsProps) {
                             </FormItem>
                         )}
                     />
+                    {/*NIVEL INSPECCION*/}
+                    <FormField
+                        control={form.control}
+                        name="nivelInspeccion"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Nivel de Inspección</FormLabel>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                >
+
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Actualice el nivel de Inspección" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="Normal">Normal</SelectItem>
+                                        <SelectItem value="Estricto">Estricto</SelectItem>
+                                        <SelectItem value="Reducido">Reducido</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
                     {/* FECHA PROGRAMADA */}
                     <FormField
@@ -251,6 +280,34 @@ export function OrderForm(props: OrderFormsProps) {
                         )}
                     />
 
+                    {/*PLAN MUESTRA*/}
+                    <FormField
+                        control={form.control}
+                        name="planMuestra"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Plan de Muestreo</FormLabel>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                >
+
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Actualice el plan de muestra" />
+                                        </SelectTrigger>
+                                    </FormControl>
+
+                                    <SelectContent>
+                                        <SelectItem value="Simple">Simple</SelectItem>
+                                        <SelectItem value="Doble">Doble</SelectItem>
+                                        <SelectItem value="Multiple">Múltiple</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
                     {/* MUESTRA */}
                     <FormField

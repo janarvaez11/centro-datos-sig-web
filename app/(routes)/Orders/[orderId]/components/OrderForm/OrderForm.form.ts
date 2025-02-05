@@ -14,5 +14,8 @@ export const formSchema = z.object({
     area: z.string().min(2),
     designacion: z.string().min(2),
     norma: z.string().min(2),
-    lote: z.string().min(2)
+    lote: z.string().min(2),
+    nivelInspeccion: z.string().min(2),
+    planMuestra: z.string().min(2)
+
 })

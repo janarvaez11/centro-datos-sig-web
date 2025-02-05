@@ -25,6 +25,8 @@ model Order {
   designacion           String
   norma                 String
   lote                  String
+  nivelInspeccion       String
+  planMuestra           String
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
   contacts              Contact[]

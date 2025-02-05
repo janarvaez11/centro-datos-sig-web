@@ -55,7 +55,9 @@ const formSchema = z.object({
     area: z.string().min(2),
     designacion: z.string().min(2),
     norma: z.string().min(2),
-    lote: z.string().min(2)
+    lote: z.string().min(2),
+    nivelInspeccion: z.string().min(2),
+    planMuestra: z.string().min(2)
 })
 
 
@@ -118,6 +120,8 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
             designacion: "",
             norma: "",
             lote: "",
+            nivelInspeccion: "",
+            planMuestra: ""
 
 
         },
@@ -168,9 +172,9 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
 
 
 
-           // Abre el modal de responsables y pasa el ID de la orden
-           setOrderId(orderId); // Actualiza el orderId
-           setOpen(true); // Abre el modal de responsables
+            // Abre el modal de responsables y pasa el ID de la orden
+            setOrderId(orderId); // Actualiza el orderId
+            setOpen(true); // Abre el modal de responsables
 
             router.refresh()
             setOpenModalCreate(false)
@@ -259,6 +263,35 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                                 </FormItem>
                             )}
                         />
+
+
+                        <FormField
+                            control={form.control}
+                            name="nivelInspeccion"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Nivel de Inspección</FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Seleccione el nivel aplicado" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Normal">Normal</SelectItem>
+                                            <SelectItem value="Estricto">Estricto</SelectItem>
+                                            <SelectItem value="Reducido">Reducido</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
 
                         <FormField
                             control={form.control}
@@ -445,6 +478,33 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
                                     <FormControl>
                                         <Input placeholder="Ej: 0000" type="number" {...field} />
                                     </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="planMuestra"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Plan de Muestreo</FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Seleccione el plan a utilizar" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Simple">Simple</SelectItem>
+                                            <SelectItem value="Doble">Doble</SelectItem>
+                                            <SelectItem value="Multiple">Múltiple</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+
                                     <FormMessage />
                                 </FormItem>
                             )}
