@@ -34,6 +34,17 @@ model Order {
   events                Event[]
 }
 
+model User {
+  id        String   @id @default(uuid())
+  userId    String
+  name      String
+  rol       String
+  code      String
+  function  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Contact {
   id        String   @id @default(uuid())
   orderId   String?
@@ -44,6 +55,7 @@ model Contact {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   order     Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  userId    String?
 
   @@index([orderId])
 }
@@ -56,6 +68,7 @@ model Tool {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   order     Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  userId    String?
 
   @@index([orderId])
 }
@@ -70,6 +83,7 @@ model Event {
   createdAt  DateTime @default(now())
   updateAt   DateTime @updatedAt
   order      Order    @relation(fields: [orderId], references: [id])
+  userId     String?
 
   @@index([orderId])
 }
