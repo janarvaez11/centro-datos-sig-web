@@ -112,7 +112,7 @@ export function DataTable<TData, TValue>({
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No hay registro de usuarios
+                                    No hay registro de herramientas
                                 </TableCell>
                             </TableRow>
                         )}

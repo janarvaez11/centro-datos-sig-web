@@ -2,14 +2,14 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal, Pencil } from 'lucide-react'
-import { User } from "@prisma/client"
+import { Tool } from "@prisma/client"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import Link from 'next/link'
 import Image from "next/image"
 
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<Tool>[] = [
     /*
     {
         accessorKey: "profileImage",
