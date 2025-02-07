@@ -1,8 +1,6 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
+
 import { fromJSON } from "postcss"
 
 import {
@@ -17,7 +15,6 @@ import {
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-import { Input } from '@/components/ui/input'
 
 import { Toast } from '@/components/ui/toast'
 
@@ -25,7 +22,7 @@ import { Toast } from '@/components/ui/toast'
 import axios from 'axios'
 import { useParams, useRouter } from "next/navigation"
 import { FormContactProps } from "./FormContact.types"
-import { formSchema } from "./FormContact.form"
+//import { formSchema } from "./FormContact.form"
 import { z } from "zod"
 import { FormInput, Variable } from "lucide-react"
 import { title } from "process"
@@ -33,139 +30,177 @@ import { toast } from "@/hooks/use-toast"
 
 
 
-export function FormContact(props: FormContactProps) {
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Button } from "@/components/ui/button"
+import { Input } from '@/components/ui/input'
+import { useState } from "react"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-    //const { setOpen } = props
+// Modificar el esquema para manejar múltiples responsables
+const formSchema = z.object({
+    contacts: z.array(z.object({
+        userId: z.string().optional(),
+        name: z.string().min(2),
+        role: z.string(),
+        code: z.string(),
+        function: z.string()
+    })).length(4)
+});
 
-    const { setOpen, orderId } = props; // Recibe el ID de la orden
-
-
-    const params = useParams<{ orderId: string }>()
-    const router = useRouter()
+export function FormContact({ setOpen, orderId }: FormContactProps) {
+    const [loading, setLoading] = useState(false);
+    const [searchResults, setSearchResults] = useState<Array<any>>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            role: "",
-            code: "",
-            function: ""
-        }
-    })
-
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        try {
-            await axios.post(`/api/order/${orderId}/contact`, values); // Usa el ID de la orden
-            toast({ title: "Responsable agregado" });
-            form.reset(); // Limpia el formulario después de guardar
-            {/* 
-            axios.post(`/api/order/${params.orderId}/contact`, values)
-            toast({ title: "Responsables agregados" })
-            router.refresh()
-            setOpen(false)
-            */}
-        } catch (error) {
-            toast({
-                title: "Error presente",
-                variant: "destructive"
+            contacts: Array(4).fill({
+                userId: "",
+                name: "",
+                role: "",
+                code: "",
+                function: ""
             })
-
         }
-    }
+    });
+
+
+
+        // Función mejorada para buscar usuario
+        const searchUser = async (name: string, index: number) => {
+            if (name.length < 2) return; // Solo buscar si hay al menos 2 caracteres
+    
+            try {
+                const response = await axios.get(`/api/user/search?name=${name}`);
+                console.log("Respuesta de búsqueda:", response.data); // Para debugging
+    
+                if (response.data) {
+                    const user = response.data;
+                    // Actualizar todos los campos del formulario
+                    form.setValue(`contacts.${index}.userId`, user.id);
+                    form.setValue(`contacts.${index}.name`, user.name);
+                    form.setValue(`contacts.${index}.role`, user.rol);  // Asegúrate que coincida con el campo en la BD
+                    form.setValue(`contacts.${index}.code`, user.code);
+                    form.setValue(`contacts.${index}.function`, user.function);
+                }
+            } catch (error) {
+                console.error("Error en búsqueda:", error);
+                toast({ 
+                    title: "Error en la búsqueda", 
+                    description: "No se encontró el usuario",
+                    variant: "destructive" 
+                });
+            }
+        };
+
+        const onSubmit = async (values: z.infer<typeof formSchema>) => {
+            try {
+                setLoading(true);
+                console.log("Enviando datos:", values); // Para debugging
+    
+                // Validar que todos los contactos tengan userId
+                const allContactsValid = values.contacts.every(contact => contact.userId);
+                if (!allContactsValid) {
+                    toast({ 
+                        title: "Error de validación", 
+                        description: "Todos los contactos deben ser usuarios válidos",
+                        variant: "destructive" 
+                    });
+                    return;
+                }
+    
+                // Registrar todos los contactos
+                await Promise.all(values.contacts.map(contact => 
+                    axios.post(`/api/order/${orderId}/contact`, contact)
+                ));
+                
+                toast({ title: "Responsables registrados exitosamente" });
+                setOpen(false);
+            } catch (error) {
+                console.error("Error al registrar:", error);
+                toast({ 
+                    title: "Error al registrar responsables", 
+                    description: "Por favor intente nuevamente",
+                    variant: "destructive" 
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
+    
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="md:grid-cols-1 grid gap-4">
-                <FormField control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Nombre:</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Colaborador" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Nombre</TableHead>
+                            <TableHead>Rol</TableHead>
+                            <TableHead>Código</TableHead>
+                            <TableHead>Función</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {form.watch('contacts').map((_, index) => (
+                            <TableRow key={index}>
+                                <TableCell>
+                                    <FormField
+                                        control={form.control}
+                                        name={`contacts.${index}.name`}
+                                        render={({ field }) => (
+                                            <Input 
+                                                {...field}
+                                                onChange={(e) => {
+                                                    field.onChange(e);
+                                                    searchUser(e.target.value, index);
+                                                }}
+                                                placeholder="Buscar usuario..."
+                                            />
+                                        )}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <FormField
+                                        control={form.control}
+                                        name={`contacts.${index}.role`}
+                                        render={({ field }) => (
+                                            <Input {...field} readOnly />
+                                        )}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <FormField
+                                        control={form.control}
+                                        name={`contacts.${index}.code`}
+                                        render={({ field }) => (
+                                            <Input {...field} readOnly />
+                                        )}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <FormField
+                                        control={form.control}
+                                        name={`contacts.${index}.function`}
+                                        render={({ field }) => (
+                                            <Input {...field} readOnly />
+                                        )}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
 
-
-                <FormField control={form.control}
-                    name="code"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Código Colaborador:</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Ej: 1111r" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-
-
-                <FormField control={form.control}
-                    name="role"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Cargo:</FormLabel>
-                            <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}>
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Seleccione el cargo" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="Supervisor">Supervisor</SelectItem>
-                                    <SelectItem value="Auditor">Auditor</SelectItem>
-                                    <SelectItem value="Rol 1">Rol 1 </SelectItem>
-                                    <SelectItem value="Rol 2">Rol 2</SelectItem>
-                                </SelectContent>
-
-                                <FormMessage />
-
-                            </Select>
-                        </FormItem>
-                    )}
-                />
-
-
-                <FormField control={form.control}
-                    name="function"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Función:</FormLabel>
-                            <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}>
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Seleccione la función" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="Responsable del Area Inspeccionada">Responsable del Area Inspeccionada</SelectItem>
-                                    <SelectItem value="Responsable de Asistir">Responsable de Asistir</SelectItem>
-                                    <SelectItem value="Responsable de la Inspeccion">Responsable de la Inspección</SelectItem>
-                                    <SelectItem value="Responsable de Aprobar">Responsable de Aprobar</SelectItem>
-                                </SelectContent>
-
-                                <FormMessage />
-
-                            </Select>
-                        </FormItem>
-                    )}
-                />
-
-
-
-                <Button type="submit">Guardar Responsables</Button>
-
+                <Button 
+                    type="submit" 
+                    className="mt-4 w-full"
+                    disabled={loading}
+                >
+                    Registrar Responsables
+                </Button>
             </form>
-
         </Form>
-    )
+    );
 }

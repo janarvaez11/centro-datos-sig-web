@@ -8,6 +8,10 @@ export async function POST(
     { params }: { params: { orderId: string } }
 ) {
     try {
+
+        const { orderId } = params;
+
+
         const { userId } = auth()
         const data = await req.json()
 
@@ -27,12 +31,15 @@ export async function POST(
             return new NextResponse("Order no encontrada", {status: 404})
         }
 
-
         const contact = await db.contact.create({
-           data:  {
-            orderId: params.orderId,
-            ...data,
-           },
+            data: {
+                orderId,
+                name: data.name,
+                role: data.role,
+                code: data.code,
+                function: data.function,
+                userId: data.userId
+            }
         });
 
         return NextResponse.json(contact);
