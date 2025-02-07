@@ -61,14 +61,15 @@ model Contact {
 }
 
 model Tool {
-  id        String   @id @default(uuid())
-  orderId   String?
-  name      String
-  code      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  order     Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  userId    String?
+  id          String   @id @default(uuid())
+  orderId     String?
+  name        String
+  code        String
+  responsible String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  order       Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  userId      String?
 
   @@index([orderId])
 }

@@ -73,7 +73,7 @@ export function OrderForm(props: OrderFormsProps) {
                 title: "Orden Actualizada"
             })
             router.refresh()
-
+            router.push("/Orders")
         } catch (error) {
             toast({
                 title: "Error al actualizar los registros",
@@ -100,7 +100,7 @@ export function OrderForm(props: OrderFormsProps) {
                             <FormItem>
                                 <FormLabel>Nombre de la Orden</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Nombre de la orden" type="text" {...field} />
+                                    <Input placeholder="Nombre de la orden" type="text"  readOnly {...field} />
                                 </FormControl>
                             </FormItem>
                         )}

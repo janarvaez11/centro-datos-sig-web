@@ -17,17 +17,15 @@ export function NewContact(){
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button>
-                    Agregar Responsable
+                    información
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[625px]">
                 <DialogHeader>
-                    <DialogTitle>Agregar un Responsable</DialogTitle>
-                    <DialogDescription>Crear los responsables de la inspección</DialogDescription>
+                    <DialogDescription>Los responsables de esta orden fueron agregados en la creación de la misma</DialogDescription>
                 </DialogHeader>
                 {/* <FormContact setOpen={setOpen}/> */}
             </DialogContent>
-
         </Dialog>
 
     )

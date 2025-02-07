@@ -7,7 +7,8 @@ import {
     CircleHelpIcon,
     Calendar,
     User,
-    Circle
+    Circle,
+    PenTool
 } from "lucide-react";
 
 export const dataGeneralSidebar = [
@@ -30,6 +31,11 @@ export const dataGeneralSidebar = [
         icon: User,
         label: "Usuarios",
         href: "/Users"
+    },
+    {
+        icon: PenTool,
+        label: "Instrumentos",
+        href: "/Tools"
     },
 ]
 

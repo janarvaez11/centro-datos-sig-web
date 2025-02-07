@@ -17,13 +17,12 @@ export function NewTool(){
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button>
-                    Agregar Herramienta de Medición
+                    Información
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[625px]">
                 <DialogHeader>
-                    <DialogTitle>Agregar un instrumento</DialogTitle>
-                    <DialogDescription>Crear los instrumentos de Medición</DialogDescription>
+                    <DialogDescription>Los responsables de esta orden fueron agregados en la creación de la misma</DialogDescription>
                 </DialogHeader>
                 {/*<FormTool setOpen={setOpen}/>*/}
             </DialogContent>

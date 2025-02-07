@@ -81,7 +81,7 @@ export function HeaderOrders() {
 
             {/* Modal para Responsables */}
             <Dialog open={openResponsiblesModal} onOpenChange={setOpenResponsiblesModal}>
-                <DialogContent className="sm:max-w-[500px]">
+                <DialogContent className="sm:max-w-[800px]">
                     <DialogHeader>
                         <DialogTitle>Registrar Responsables</DialogTitle>
                         <DialogDescription>
@@ -108,7 +108,7 @@ export function HeaderOrders() {
 
             {/* Modal para Instrumentos */}
             <Dialog open={openToolsModal} onOpenChange={setOpenToolsModal}>
-                <DialogContent className="sm:max-w-[500px]">
+                <DialogContent className="sm:max-w-[800px]">
                     <DialogHeader>
                         <DialogTitle>Registrar Responsables</DialogTitle>
                         <DialogDescription>
