@@ -40,6 +40,9 @@ export function HeaderOrders() {
     {/*PARA CREAR RESPONSABLES*/ }
     const [open, setOpen] = useState(false)
 
+    {/*PARA CREAR RESPONSABLES*/ }
+    const [openTools, setOpenTools] = useState(false)
+
 
 
     return (
@@ -69,6 +72,7 @@ export function HeaderOrders() {
                     <FormCreateOrder
                         setOpenModalCreate={setOpenModalCreate}
                         setOpen={setOpenResponsiblesModal} // Pasa la función para abrir el modal de responsables
+                        setOpenTools={setOpenToolsModal}
                         setOrderId={setOrderId} // Pasa la función para actualizar el orderId
 
                     />
@@ -105,7 +109,6 @@ export function HeaderOrders() {
             </Dialog>
 
 
-
             {/* Modal para Instrumentos */}
             <Dialog open={openToolsModal} onOpenChange={setOpenToolsModal}>
                 <DialogContent className="sm:max-w-[800px]">
@@ -117,7 +120,7 @@ export function HeaderOrders() {
                     </DialogHeader>
                     {orderId && (
                         <FormTool
-                            setOpen={setOpenToolsModal}
+                            setOpenTools={setOpenToolsModal}
                             orderId={orderId}
                             onResponsibleAdded={() => {
                                 setToolsCount((prev) => prev + 1);
@@ -130,9 +133,6 @@ export function HeaderOrders() {
 
                 </DialogContent>
             </Dialog>
-
-
-
 
         </div>
     )

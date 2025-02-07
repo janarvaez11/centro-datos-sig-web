@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react"
 
 export type FormToolProps = {
 
-    setOpen: Dispatch<SetStateAction<boolean>>;
+    setOpenTools: Dispatch<SetStateAction<boolean>>;
 
     orderId: string;
     

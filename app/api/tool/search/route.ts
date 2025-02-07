@@ -4,36 +4,35 @@ import { NextResponse } from "next/server"
 export async function GET(req: Request) {
     try {
         const { searchParams } = new URL(req.url);
-        const name = searchParams.get("name");
+        const code = searchParams.get("code");
 
-        if (!name) {
-            return new NextResponse("Nombre requerido", { status: 400 });
+        if (!code) {
+            return new NextResponse("Codigo requerido", { status: 400 });
         }
 
         // Modificamos la consulta para ser más flexible en la búsqueda
-        const user = await db.user.findFirst({
+        const tool = await db.tool.findFirst({
             where: {
-                name: {
-                    contains: name,
+                code: {
+                    contains: code,
                     mode: 'insensitive'
                 }
             },
             select: {
                 id: true,
                 name: true,
-                rol: true,    // Asegúrate que estos nombres coincidan
                 code: true,   // exactamente con los campos en tu
-                function: true // tabla User
+                responsible: true // tabla User
             }
         });
 
-        if (!user) {
+        if (!tool) {
             return new NextResponse("Usuario no encontrado", { status: 404 });
         }
 
-        return NextResponse.json(user);
+        return NextResponse.json(tool);
     } catch (error) {
-        console.error("Error en búsqueda de usuario:", error);
+        console.error("Error en búsqueda del instrumento:", error);
         return new NextResponse("Error interno", { status: 500 });
     }
 }
