@@ -45,27 +45,40 @@ export async function PATCH(
     }
 }
  
-export async function DELETE(req: Request, {params}: {params: {userId: string}}){
+export async function DELETE(req: Request, {params}: {params: {userId: string}}) {
     try {
-        //const {userId} = auth()
-        const {userId} = params
+        const {userId} = params;
 
-        if(!userId){
-            return new NextResponse("Unauthorized", {status: 401})
+        if(!userId) {
+            return new NextResponse("Unauthorized", {status: 401});
+        }
+
+        // Verificar si el usuario está asociado a alguna orden
+        const associatedContacts = await db.contact.findFirst({
+            where: {
+                userId: userId,
+                orderId: {
+                    not: null
+                }
+            }
+        });
+
+        if (associatedContacts) {
+            return new NextResponse(
+                "No se puede eliminar el usuario porque está asociado a una o más órdenes. Elimine primero las órdenes relacionadas.",
+                {status: 400}
+            );
         }
 
         const deleteUser = await db.user.delete({
-            where:{
+            where: {
                 id: userId,
-
             },
         });
 
         return NextResponse.json(deleteUser);
-
-        
     } catch (error) {
-        console.log("[DELETE USER ID]", error)
-        return new NextResponse("Error Interno", {status:500})
+        console.log("[DELETE USER ID]", error);
+        return new NextResponse("Error Interno", {status: 500});
     }
 }

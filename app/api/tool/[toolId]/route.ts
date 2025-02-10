@@ -32,27 +32,37 @@ export async function PATCH(
 
 }
  
-export async function DELETE(req: Request, {params}: {params: {toolId: string}}){
+export async function DELETE(req: Request, {params}: {params: {toolId: string}}) {
     try {
-        //const {userId} = auth()
-        const {toolId} = params
+        const {toolId} = params;
 
-        if(!toolId){
-            return new NextResponse("Unauthorized", {status: 401})
+        if(!toolId) {
+            return new NextResponse("Unauthorized", {status: 401});
+        }
+
+        // Verificar si la herramienta está asociada a alguna orden
+        const tool = await db.tool.findUnique({
+            where: {
+                id: toolId
+            }
+        });
+
+        if (tool?.orderId) {
+            return new NextResponse(
+                "No se puede eliminar el instrumento porque está asociado a una orden. Elimine primero la orden o desasocie el instrumento.",
+                {status: 400}
+            );
         }
 
         const deleteTool = await db.tool.delete({
-            where:{
+            where: {
                 id: toolId,
-
             },
         });
 
         return NextResponse.json(deleteTool);
-
-        
     } catch (error) {
-        console.log("[DELETE TOOL ID]", error)
-        return new NextResponse("Error Interno", {status:500})
+        console.log("[DELETE TOOL ID]", error);
+        return new NextResponse("Error Interno", {status: 500});
     }
 }

@@ -30,30 +30,37 @@ export async function PATCH(
         console.log("[ORDER ID]", error);
         return new NextResponse("Error Interno", { status: 500 });
     }
-
 }
  
-export async function DELETE(req: Request, {params}: {params: {orderId: string}}){
+export async function DELETE(req: Request, {params}: {params: {orderId: string}}) {
     try {
         const {userId} = auth()
         const {orderId} = params
 
-        if(!userId){
+        if(!userId) {
             return new NextResponse("Unauthorized", {status: 401})
         }
 
-        const deletedOrder = await db.order.delete({
-            where:{
-                id: orderId,
+        // Primero, desasociar los instrumentos de la orden
+        await db.tool.updateMany({
+            where: {
+                orderId: orderId
+            },
+            data: {
+                orderId: null
+            }
+        });
 
+        // Luego eliminar la orden (esto eliminará automáticamente los contactos por la relación onDelete: Cascade)
+        const deletedOrder = await db.order.delete({
+            where: {
+                id: orderId,
             },
         });
 
         return NextResponse.json(deletedOrder);
-
-        
     } catch (error) {
         console.log("[DELETE ORDER ID]", error)
-        return new NextResponse("Error Interno", {status:500})
+        return new NextResponse("Error Interno", {status: 500})
     }
 }
