@@ -43,9 +43,9 @@ import { useEffect } from "react"
 
 const formSchema = z.object({
     order: z.string().min(2).refine(
-        (value) => /^ODI\d{5}$/.test(value),
+        (value) => /^ODI-\d{5}$/.test(value),
         {
-            message: "El código debe tener el formato ODIXXXXX donde X son números"
+            message: "El código debe tener el formato ODI-XXXXX donde X son números"
         }
     ),
     estado: z.string().min(2),
@@ -79,26 +79,13 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
         const fetchNextOrderNumber = async () => {
             try {
                 const response = await axios.get("/api/order/last");
-                const lastOrder = response.data?.order || "ODI00000";
-                
-                // Validar el formato del último número
-                if (!/^ODI\d{5}$/.test(lastOrder)) {
-                    throw new Error("Formato de orden inválido");
+                if (response.data?.error) {
+                    throw new Error(response.data.error);
                 }
-
-                const lastNumber = parseInt(lastOrder.replace("ODI", ""), 10);
-                const nextNumber = lastNumber + 1;
-                const nextOrder = `ODI${String(nextNumber).padStart(5, "0")}`;
-
-                // Verificar si el nuevo número ya existe
-                const checkExists = await axios.get(`/api/order/check/${nextOrder}`);
-                if (checkExists.data.exists) {
-                    toast({
-                        title: "Error",
-                        description: "El número de orden ya existe",
-                        variant: "destructive"
-                    });
-                    return;
+                
+                const nextOrder = response.data.order;
+                if (!nextOrder || !/^ODI-\d{5}$/.test(nextOrder)) {
+                    throw new Error("Formato de orden inválido recibido del servidor");
                 }
 
                 setOrderNumber(nextOrder);
@@ -107,7 +94,7 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                 console.error("Error obteniendo el número de orden:", error);
                 toast({
                     title: "Error",
-                    description: "Error al generar el número de orden",
+                    description: error instanceof Error ? error.message : "Error al generar el número de orden",
                     variant: "destructive"
                 });
             }

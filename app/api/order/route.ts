@@ -29,31 +29,54 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-    try{
+    try {
+        const { userId } = auth();
+        const body = await req.json();
 
-        const {userId} = auth();
-        const data = await req.json()
+        if (!userId) {
+            return new NextResponse("No autorizado", { status: 401 });
+        }
 
+        if (!body.order || !/^ODI-\d{5}$/.test(body.order)) {
+            return new NextResponse("Formato de orden inválido", { status: 400 });
+        }
 
-        if(!userId){
-            return new NextResponse("Unauthorized", {status: 401})
+        // Verificar si la orden ya existe
+        const existingOrder = await db.order.findFirst({
+            where: {
+                order: body.order
+            }
+        });
 
+        if (existingOrder) {
+            return new NextResponse("El número de orden ya existe", { status: 400 });
         }
 
         const order = await db.order.create({
-            data:{
+            data: {
                 userId,
-                ...data,
-            },
+                order: body.order,
+                estado: body.estado,
+                tipoInspeccion: body.tipoInspeccion,
+                fechaProgramada: body.fechaProgramada,
+                procesoProduccion: body.procesoProduccion,
+                especificacionProceso: body.especificacionProceso,
+                muestra: body.muestra,
+                cliente: body.cliente,
+                fig: body.fig,
+                proyecto: body.proyecto,
+                area: body.area,
+                designacion: body.designacion,
+                norma: body.norma,
+                lote: body.lote,
+                nivelInspeccion: body.nivelInspeccion,
+                planMuestra: body.planMuestra
+            }
         });
 
         return NextResponse.json(order);
-
-    }catch(error){
-        console.log("[ORDER]", error);
-        return new NextResponse("Internal Error", {status: 500})
-
-
+    } catch (error: any) {
+        console.error("[ORDERS_POST]", error);
+        return new NextResponse("Error interno del servidor", { status: 500 });
     }
-    
 }

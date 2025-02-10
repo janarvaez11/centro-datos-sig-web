@@ -3,38 +3,55 @@ import { db } from "@/lib/db";
 
 export async function GET() {
     try {
-        // Obtener la última orden ordenando por el número
-        const lastOrder = await db.order.findFirst({
-            where: {
-                order: {
-                    startsWith: 'ODI'
-                }
-            },
-            orderBy: {
-                order: 'desc'
+        // Obtener todas las órdenes y ordenarlas localmente para asegurar el orden correcto
+        const allOrders = await db.order.findMany({
+            select: {
+                order: true
             }
         });
 
-        let nextNumber = 1; // Por defecto empezamos en 1
+        // Filtrar y ordenar las órdenes válidas
+        const validOrders = allOrders
+            .map(o => o.order)
+            .filter(order => order.startsWith('ODI-'))
+            .map(order => {
+                const num = parseInt(order.split('-')[1]);
+                return { order, num };
+            })
+            .sort((a, b) => b.num - a.num); // Ordenar de forma descendente
 
-        if (lastOrder && lastOrder.order) {
-            // Extraer el número de la última orden
-            const match = lastOrder.order.match(/ODI(\d+)/);
-            if (match) {
-                nextNumber = parseInt(match[1], 10) + 1;
-            }
+        let nextNumber = 1; // Valor por defecto
+
+        if (validOrders.length > 0) {
+            nextNumber = validOrders[0].num + 1; // Tomar el número más alto y sumar 1
         }
 
-        // Generar el siguiente número en formato ODI00001
-        const nextOrder = `ODI${String(nextNumber).padStart(5, '0')}`;
+        // Generar el siguiente número en formato ODI-00001
+        const nextOrder = `ODI-${String(nextNumber).padStart(5, '0')}`;
 
-        return NextResponse.json({ order: nextOrder }, {
+        // Verificar si el número generado ya existe
+        const exists = allOrders.some(o => o.order === nextOrder);
+        if (exists) {
+            throw new Error("Número de orden duplicado detectado");
+        }
+
+        return NextResponse.json({ 
+            order: nextOrder,
+            currentMax: validOrders.length > 0 ? validOrders[0].order : null
+        }, {
             headers: {
-                'Cache-Control': 'no-store, no-cache, must-revalidate'
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
             }
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error generando número de orden:", error);
-        return NextResponse.json({ error: "Error obteniendo el número de orden" }, { status: 500 });
+        return NextResponse.json({ 
+            error: "Error obteniendo el número de orden",
+            details: error?.message || "Error desconocido"
+        }, { 
+            status: 500 
+        });
     }
 }
