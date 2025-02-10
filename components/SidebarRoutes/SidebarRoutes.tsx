@@ -22,7 +22,7 @@ export default function SidebarRoutes() {
                 <Separator />
 
                 <div className="p-2 md:p-3">
-                    <p className="text-slate-500 mb-2">Tools</p>
+                    <p className="text-slate-500 mb-2">Análisis</p>
                     {dataToolsSidebar.map((item) => (
                         <SiderbarItem key={item.label} item={item} />
                     ))}

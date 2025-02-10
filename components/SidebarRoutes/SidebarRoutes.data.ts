@@ -42,7 +42,7 @@ export const dataGeneralSidebar = [
 export const dataToolsSidebar = [
     {
         icon: CircleHelpIcon,
-        label: "Faqs",
+        label: "AMEF",
         href: "/faqs"
     },
     {

@@ -39,6 +39,7 @@ import { useRouter } from "next/navigation"
 import { Separator } from "@radix-ui/react-separator"
 
 import { useEffect } from "react"
+import { RefreshCw } from "lucide-react"
 
 
 const formSchema = z.object({
@@ -75,31 +76,40 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
 
 
     {/*Crear una función para obtener el último número de orden*/ }
-    useEffect(() => {
-        const fetchNextOrderNumber = async () => {
-            try {
-                const response = await axios.get("/api/order/last");
-                if (response.data?.error) {
-                    throw new Error(response.data.error);
+    const fetchNextOrderNumber = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get("/api/order/last", {
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
                 }
-                
-                const nextOrder = response.data.order;
-                if (!nextOrder || !/^ODI-\d{5}$/.test(nextOrder)) {
-                    throw new Error("Formato de orden inválido recibido del servidor");
-                }
-
-                setOrderNumber(nextOrder);
-                form.setValue("order", nextOrder, { shouldValidate: true });
-            } catch (error) {
-                console.error("Error obteniendo el número de orden:", error);
-                toast({
-                    title: "Error",
-                    description: error instanceof Error ? error.message : "Error al generar el número de orden",
-                    variant: "destructive"
-                });
+            });
+            
+            if (response.data?.error) {
+                throw new Error(response.data.error);
             }
-        };
+            
+            const nextOrder = response.data.order;
+            if (!nextOrder || !/^ODI-\d{5}$/.test(nextOrder)) {
+                throw new Error("Formato de orden inválido recibido del servidor");
+            }
 
+            setOrderNumber(nextOrder);
+            form.setValue("order", nextOrder, { shouldValidate: true });
+        } catch (error) {
+            console.error("Error obteniendo el número de orden:", error);
+            toast({
+                title: "Error",
+                description: error instanceof Error ? error.message : "Error al generar el número de orden",
+                variant: "destructive"
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchNextOrderNumber();
     }, []);
 
@@ -229,9 +239,20 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Número de Orden</FormLabel>
-                                        <FormControl>
-                                            <Input readOnly {...field} />
-                                        </FormControl>
+                                        <div className="flex items-center gap-2">
+                                            <FormControl>
+                                                <Input readOnly {...field} />
+                                            </FormControl>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="icon"
+                                                onClick={fetchNextOrderNumber}
+                                                disabled={loading}
+                                            >
+                                                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                                            </Button>
+                                        </div>
                                         <FormMessage />
                                     </FormItem>
                                 )}

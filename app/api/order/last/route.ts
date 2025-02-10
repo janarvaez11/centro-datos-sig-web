@@ -7,6 +7,9 @@ export async function GET() {
         const allOrders = await db.order.findMany({
             select: {
                 order: true
+            },
+            orderBy: {
+                order: 'desc'
             }
         });
 
@@ -18,7 +21,7 @@ export async function GET() {
                 const num = parseInt(order.split('-')[1]);
                 return { order, num };
             })
-            .sort((a, b) => a.num - b.num); // Ordenar de forma ascendente
+            .sort((a, b) => a.num - b.num);
 
         // Encontrar el primer número faltante en la secuencia
         let nextNumber = 1;
@@ -44,23 +47,36 @@ export async function GET() {
             throw new Error("Número de orden duplicado detectado");
         }
 
-        return NextResponse.json({ 
-            order: nextOrder,
-            currentMax: validOrders.length > 0 ? validOrders[validOrders.length - 1].order : null
-        }, {
-            headers: {
-                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0'
+        return new NextResponse(
+            JSON.stringify({ 
+                order: nextOrder,
+                currentMax: validOrders.length > 0 ? validOrders[validOrders.length - 1].order : null
+            }), 
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
             }
-        });
+        );
     } catch (error: any) {
         console.error("Error generando número de orden:", error);
-        return NextResponse.json({ 
-            error: "Error obteniendo el número de orden",
-            details: error?.message || "Error desconocido"
-        }, { 
-            status: 500 
-        });
+        return new NextResponse(
+            JSON.stringify({ 
+                error: "Error obteniendo el número de orden",
+                details: error?.message || "Error desconocido"
+            }), 
+            { 
+                status: 500,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            }
+        );
     }
 }
