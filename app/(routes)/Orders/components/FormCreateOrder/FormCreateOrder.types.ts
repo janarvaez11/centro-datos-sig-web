@@ -11,7 +11,8 @@ export type FormCreateOrderProps = {
     /*Abre el modal de herramientas*/
     setOpenTools:Dispatch<SetStateAction<boolean>>;
     
-    setOrderId: Dispatch<SetStateAction<string | null>>; // Agregar esta línea
+    setOrderId: Dispatch<SetStateAction<string | null>>;
 
+    onOrderCreated?: (orderId: string) => void;
 
 }

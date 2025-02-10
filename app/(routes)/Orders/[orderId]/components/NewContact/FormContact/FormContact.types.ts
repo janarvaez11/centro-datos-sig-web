@@ -5,7 +5,8 @@ export type FormContactProps = {
 
     orderId: string;
     
-    onResponsibleAdded: () => void;// Añade esta línea
+    onResponsibleAdded: () => void;
+    onCompleted?: () => void;
 
 
 };

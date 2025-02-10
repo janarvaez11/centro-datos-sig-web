@@ -48,7 +48,7 @@ const formSchema = z.object({
     })).length(4)
 });
 
-export function FormContact({ setOpen, orderId }: FormContactProps) {
+export function FormContact({ setOpen, orderId, onCompleted }: FormContactProps) {
     const [loading, setLoading] = useState(false);
     const [searchResults, setSearchResults] = useState<Array<any>>([]);
 
@@ -97,8 +97,7 @@ export function FormContact({ setOpen, orderId }: FormContactProps) {
         const onSubmit = async (values: z.infer<typeof formSchema>) => {
             try {
                 setLoading(true);
-                console.log("Enviando datos:", values); // Para debugging
-    
+                
                 // Validar que todos los contactos tengan userId
                 const allContactsValid = values.contacts.every(contact => contact.userId);
                 if (!allContactsValid) {
@@ -109,13 +108,18 @@ export function FormContact({ setOpen, orderId }: FormContactProps) {
                     });
                     return;
                 }
-    
+
                 // Registrar todos los contactos
                 await Promise.all(values.contacts.map(contact => 
                     axios.post(`/api/order/${orderId}/contact`, contact)
                 ));
                 
                 toast({ title: "Responsables registrados exitosamente" });
+                
+                // Llamar a onCompleted antes de cerrar el modal
+                if (onCompleted) {
+                    onCompleted();
+                }
                 setOpen(false);
             } catch (error) {
                 console.error("Error al registrar:", error);

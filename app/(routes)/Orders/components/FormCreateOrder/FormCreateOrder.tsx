@@ -42,7 +42,12 @@ import { useEffect } from "react"
 
 
 const formSchema = z.object({
-    order: z.string().min(2),
+    order: z.string().min(2).refine(
+        (value) => /^ODI\d{5}$/.test(value),
+        {
+            message: "El código debe tener el formato ODIXXXXX donde X son números"
+        }
+    ),
     estado: z.string().min(2),
     tipoInspeccion: z.string().min(2),
     fechaProgramada: z.string().min(2),
@@ -62,8 +67,8 @@ const formSchema = z.object({
 
 
 
-export function FormCreateOrder(props: FormCreateOrderProps) {
-
+export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrderCreated }: FormCreateOrderProps) {
+    const [loading, setLoading] = useState(false);
 
     {/*PARA GENERA EL NUMERO DE ORDEN */ }
     const [order, setOrderNumber] = useState("");
@@ -73,21 +78,38 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
     useEffect(() => {
         const fetchNextOrderNumber = async () => {
             try {
-                const response = await axios.get("/api/order/last"); // Obtiene la última orden
+                const response = await axios.get("/api/order/last");
                 const lastOrder = response.data?.order || "ODI00000";
+                
+                // Validar el formato del último número
+                if (!/^ODI\d{5}$/.test(lastOrder)) {
+                    throw new Error("Formato de orden inválido");
+                }
 
-                // Si la respuesta indica que no hay órdenes, inicializa con ODI00001
-                const nextOrder = lastOrder === "ODI00000" ? "ODI00001" : `ODI${String(parseInt(lastOrder.replace("ODI", ""), 10) + 1).padStart(5, "0")}`;
+                const lastNumber = parseInt(lastOrder.replace("ODI", ""), 10);
+                const nextNumber = lastNumber + 1;
+                const nextOrder = `ODI${String(nextNumber).padStart(5, "0")}`;
 
-                console.log("Nuevo número de orden generado:", nextOrder);
+                // Verificar si el nuevo número ya existe
+                const checkExists = await axios.get(`/api/order/check/${nextOrder}`);
+                if (checkExists.data.exists) {
+                    toast({
+                        title: "Error",
+                        description: "El número de orden ya existe",
+                        variant: "destructive"
+                    });
+                    return;
+                }
 
-                setOrderNumber(nextOrder);  // Actualiza el estado del número de orden
+                setOrderNumber(nextOrder);
                 form.setValue("order", nextOrder, { shouldValidate: true });
-
             } catch (error) {
                 console.error("Error obteniendo el número de orden:", error);
-                setOrderNumber("ODI00001");
-                form.setValue("order", "ODI00001", { shouldValidate: true });
+                toast({
+                    title: "Error",
+                    description: "Error al generar el número de orden",
+                    variant: "destructive"
+                });
             }
         };
 
@@ -96,7 +118,7 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
 
 
     //const { setOpenModalCreate} = props
-    const { setOpenModalCreate, setOpen, setOrderId } = props
+   // const { setOpenModalCreate, setOpen, setOrderId } = props
 
     const router = useRouter()
 
@@ -132,59 +154,78 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
     // 2. Define a submit handler.
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            //axios.post("/api/order", values)
-            const responseOrder = await axios.post("/api/order", values);
-            const orderId = responseOrder.data.id; // Suponiendo que el backend devuelve el ID
-
-
-            toast({ title: "Orden Creada Correctamente" })
-
-
-
-            // Llamar al flujo de Power Automate para registrar en SharePoint
-            const response = await fetch("https://prod-136.westus.logic.azure.com:443/workflows/51ffde8d7bd14ff0a3eea66cd36c001e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=kWpnGHilCBgpHBdZUp-AhEbqZ07IauXu20prUxWr3wY", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    ordenInspeccion: values.order,
-                    estadoInspeccion: values.estado,
-                    tipoInspeccion: values.tipoInspeccion,
-                    fechaInspeccion: values.fechaProgramada,
-                    procesoProduccionInspeccion: values.procesoProduccion,
-                    procesoEspecificacionInspeccion: values.especificacionProceso,
-                    muestraInspeccion: values.muestra,
-                    clienteInspeccion: values.cliente,
-                    proyectoInspeccion: values.proyecto,
-                    figInspeccion: values.fig,
-                    areaInspeccion: values.area,
-                    designacionInspeccion: values.designacion,
-                    normaInspeccion: values.norma,
-                    loteInspeccion: values.lote,
-                }),
-            })
-            if (response.ok) {
-                toast({ title: "Datos enviados correctamente a Power Automate y SharePoint" })
-            } else {
-                toast({ title: "Error al enviar los datos a Power Automate", variant: "destructive" })
+            setLoading(true);
+            
+            // Verificar nuevamente si el número existe antes de crear
+            const checkExists = await axios.get(`/api/order/check/${values.order}`);
+            if (checkExists.data.exists) {
+                toast({
+                    title: "Error",
+                    description: "El número de orden ya existe",
+                    variant: "destructive"
+                });
+                return;
             }
 
+            const responseOrder = await axios.post("/api/order", values);
+            const orderId = responseOrder.data.id;
 
+            toast({ title: "Orden Creada Correctamente" });
 
-            // Abre el modal de responsables y pasa el ID de la orden
-            setOrderId(orderId); // Actualiza el orderId
-            setOpen(true); // Abre el modal de responsables
+            // Llamar al flujo de Power Automate
+            try {
+                const response = await fetch("https://prod-136.westus.logic.azure.com:443/workflows/51ffde8d7bd14ff0a3eea66cd36c001e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=kWpnGHilCBgpHBdZUp-AhEbqZ07IauXu20prUxWr3wY", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        ordenInspeccion: values.order,
+                        estadoInspeccion: values.estado,
+                        tipoInspeccion: values.tipoInspeccion,
+                        fechaInspeccion: values.fechaProgramada,
+                        procesoProduccionInspeccion: values.procesoProduccion,
+                        procesoEspecificacionInspeccion: values.especificacionProceso,
+                        muestraInspeccion: values.muestra,
+                        clienteInspeccion: values.cliente,
+                        proyectoInspeccion: values.proyecto,
+                        figInspeccion: values.fig,
+                        areaInspeccion: values.area,
+                        designacionInspeccion: values.designacion,
+                        normaInspeccion: values.norma,
+                        loteInspeccion: values.lote,
+                    }),
+                });
+                
+                if (response.ok) {
+                    toast({ title: "Datos enviados correctamente a Power Automate y SharePoint" });
+                }
+            } catch (error) {
+                console.error("Error en Power Automate:", error);
+                toast({ 
+                    title: "Error al enviar los datos a Power Automate", 
+                    variant: "destructive" 
+                });
+            }
 
-            router.refresh()
-            setOpenModalCreate(false)
+            // Notificar que la orden fue creada y pasar al siguiente paso
+            if (onOrderCreated) {
+                onOrderCreated(orderId);
+            } else {
+                setOrderId(orderId);
+                setOpen(true);
+                setOpenModalCreate(false);
+            }
 
         } catch (error) {
-            Toast({
-                title: "Something went wrong",
+            console.error("Error al crear la orden:", error);
+            toast({
+                title: "Error al crear la orden",
+                description: "Por favor intente nuevamente",
                 variant: "destructive"
-            })
-
+            });
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -526,7 +567,7 @@ export function FormCreateOrder(props: FormCreateOrderProps) {
 
 
                     </div>
-                    <Button type="submit" disabled={!isValid}> Registrar Orden</Button>
+                    <Button type="submit" disabled={!isValid || loading}> Siguiente </Button>
                 </form>
             </Form>
 
