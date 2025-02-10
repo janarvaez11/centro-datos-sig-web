@@ -18,7 +18,6 @@ export async function PATCH(
         const order = await db.order.update({
             where: {
                 id: orderId,
-                userId,
             },
             data: {
                 ...values,
@@ -51,7 +50,7 @@ export async function DELETE(req: Request, {params}: {params: {orderId: string}}
             }
         });
 
-        // Luego eliminar la orden (esto eliminará automáticamente los contactos por la relación onDelete: Cascade)
+        // Luego eliminar la orden
         const deletedOrder = await db.order.delete({
             where: {
                 id: orderId,

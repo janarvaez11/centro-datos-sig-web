@@ -22,7 +22,7 @@ export function NewTool(){
             </DialogTrigger>
             <DialogContent className="sm:max-w-[625px]">
                 <DialogHeader>
-                    <DialogDescription>Los responsables de esta orden fueron agregados en la creación de la misma</DialogDescription>
+                    <DialogDescription>Los instrumentos de esta orden fueron agregados en la creación de la misma</DialogDescription>
                 </DialogHeader>
                 {/*<FormTool setOpen={setOpen}/>*/}
             </DialogContent>

@@ -9,7 +9,7 @@ export async function GET(req: Request) {
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
-        // Obtener todas las órdenes
+        // Obtener todas las órdenes sin filtrar por userId
         const orders = await db.order.findMany({
             include: {
                 contacts: true,

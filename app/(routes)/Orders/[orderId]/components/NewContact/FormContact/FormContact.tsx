@@ -24,7 +24,7 @@ import { useParams, useRouter } from "next/navigation"
 import { FormContactProps } from "./FormContact.types"
 //import { formSchema } from "./FormContact.form"
 import { z } from "zod"
-import { FormInput, Variable } from "lucide-react"
+import { FormInput, Variable, Search } from "lucide-react"
 import { title } from "process"
 import { toast } from "@/hooks/use-toast"
 
@@ -36,6 +36,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from '@/components/ui/input'
 import { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 // Modificar el esquema para manejar múltiples responsables
 const formSchema = z.object({
@@ -51,6 +52,8 @@ const formSchema = z.object({
 export function FormContact({ setOpen, orderId, onCompleted }: FormContactProps) {
     const [loading, setLoading] = useState(false);
     const [searchResults, setSearchResults] = useState<Array<any>>([]);
+    const [showSearchModal, setShowSearchModal] = useState(false);
+    const [selectedRowIndex, setSelectedRowIndex] = useState<number | null>(null);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -133,78 +136,151 @@ export function FormContact({ setOpen, orderId, onCompleted }: FormContactProps)
             }
         };
     
+    // Función para buscar todos los usuarios
+    const fetchAllUsers = async () => {
+        try {
+            const response = await axios.get('/api/user/all');
+            setSearchResults(response.data);
+        } catch (error) {
+            console.error("Error al obtener usuarios:", error);
+            toast({ 
+                title: "Error al obtener usuarios", 
+                description: "Por favor intente nuevamente",
+                variant: "destructive" 
+            });
+        }
+    };
+
+    // Función para seleccionar un usuario del modal
+    const selectUser = (user: any) => {
+        if (typeof selectedRowIndex !== 'number') return;
+        
+        form.setValue(`contacts.${selectedRowIndex}.userId`, user.id);
+        form.setValue(`contacts.${selectedRowIndex}.name`, user.name);
+        form.setValue(`contacts.${selectedRowIndex}.role`, user.rol);
+        form.setValue(`contacts.${selectedRowIndex}.code`, user.code);
+        form.setValue(`contacts.${selectedRowIndex}.function`, user.function);
+        setShowSearchModal(false);
+    };
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Nombre</TableHead>
-                            <TableHead>Rol</TableHead>
-                            <TableHead>Código</TableHead>
-                            <TableHead>Función</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {form.watch('contacts').map((_, index) => (
-                            <TableRow key={index}>
-                                <TableCell>
-                                    <FormField
-                                        control={form.control}
-                                        name={`contacts.${index}.name`}
-                                        render={({ field }) => (
-                                            <Input 
-                                                {...field}
-                                                onChange={(e) => {
-                                                    field.onChange(e);
-                                                    searchUser(e.target.value, index);
-                                                }}
-                                                placeholder="Buscar usuario..."
-                                            />
-                                        )}
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <FormField
-                                        control={form.control}
-                                        name={`contacts.${index}.role`}
-                                        render={({ field }) => (
-                                            <Input {...field} readOnly />
-                                        )}
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <FormField
-                                        control={form.control}
-                                        name={`contacts.${index}.code`}
-                                        render={({ field }) => (
-                                            <Input {...field} readOnly />
-                                        )}
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <FormField
-                                        control={form.control}
-                                        name={`contacts.${index}.function`}
-                                        render={({ field }) => (
-                                            <Input {...field} readOnly />
-                                        )}
-                                    />
-                                </TableCell>
+        <DialogContent className="sm:max-w-[1000px]" onPointerDownOutside={e => e.preventDefault()}>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Nombre</TableHead>
+                                <TableHead>Rol</TableHead>
+                                <TableHead>Código</TableHead>
+                                <TableHead>Función</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {form.watch('contacts').map((_, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        <div className="flex items-center space-x-2">
+                                            <FormField
+                                                control={form.control}
+                                                name={`contacts.${index}.name`}
+                                                render={({ field }) => (
+                                                    <Input 
+                                                        {...field}
+                                                        onChange={(e) => {
+                                                            field.onChange(e);
+                                                            searchUser(e.target.value, index);
+                                                        }}
+                                                        placeholder="Buscar usuario..."
+                                                    />
+                                                )}
+                                            />
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => {
+                                                    setSelectedRowIndex(index);
+                                                    setShowSearchModal(true);
+                                                    fetchAllUsers();
+                                                }}
+                                            >
+                                                <Search className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <FormField
+                                            control={form.control}
+                                            name={`contacts.${index}.role`}
+                                            render={({ field }) => (
+                                                <Input {...field} readOnly />
+                                            )}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <FormField
+                                            control={form.control}
+                                            name={`contacts.${index}.code`}
+                                            render={({ field }) => (
+                                                <Input {...field} readOnly />
+                                            )}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <FormField
+                                            control={form.control}
+                                            name={`contacts.${index}.function`}
+                                            render={({ field }) => (
+                                                <Input {...field} readOnly />
+                                            )}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                    <Button type="submit" className="mt-4 w-full" disabled={loading}>
+                        Registrar Responsables
+                    </Button>
+                </form>
+            </Form>
 
-                <Button 
-                    type="submit" 
-                    className="mt-4 w-full"
-                    disabled={loading}
-                >
-                    Registrar Responsables
-                </Button>
-            </form>
-        </Form>
+            {showSearchModal && (
+                <Dialog open={showSearchModal} onOpenChange={setShowSearchModal}>
+                    <DialogContent onPointerDownOutside={e => e.preventDefault()}>
+                        <DialogHeader>
+                            <DialogTitle>Seleccionar Usuario</DialogTitle>
+                        </DialogHeader>
+                        <div className="max-h-[400px] overflow-y-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Nombre</TableHead>
+                                        <TableHead>Rol</TableHead>
+                                        <TableHead>Código</TableHead>
+                                        <TableHead>Función</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {searchResults.map((user) => (
+                                        <TableRow
+                                            key={user.id}
+                                            className="cursor-pointer hover:bg-gray-100"
+                                            onClick={() => selectUser(user)}
+                                        >
+                                            <TableCell>{user.name}</TableCell>
+                                            <TableCell>{user.rol}</TableCell>
+                                            <TableCell>{user.code}</TableCell>
+                                            <TableCell>{user.function}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            )}
+        </DialogContent>
     );
 }

@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 
 export async function GET() {
     try {
-        // Obtener todas las órdenes y ordenarlas localmente para asegurar el orden correcto
+        // Obtener todas las órdenes
         const allOrders = await db.order.findMany({
             select: {
                 order: true
@@ -18,12 +18,21 @@ export async function GET() {
                 const num = parseInt(order.split('-')[1]);
                 return { order, num };
             })
-            .sort((a, b) => b.num - a.num); // Ordenar de forma descendente
+            .sort((a, b) => a.num - b.num); // Ordenar de forma ascendente
 
-        let nextNumber = 1; // Valor por defecto
+        // Encontrar el primer número faltante en la secuencia
+        let nextNumber = 1;
+        for (let i = 0; i < validOrders.length; i++) {
+            if (validOrders[i].num !== i + 1) {
+                nextNumber = i + 1;
+                break;
+            }
+            nextNumber = i + 2; // Si no hay huecos, usar el siguiente número
+        }
 
-        if (validOrders.length > 0) {
-            nextNumber = validOrders[0].num + 1; // Tomar el número más alto y sumar 1
+        // Si no hay órdenes, empezar desde 1
+        if (validOrders.length === 0) {
+            nextNumber = 1;
         }
 
         // Generar el siguiente número en formato ODI-00001
@@ -37,7 +46,7 @@ export async function GET() {
 
         return NextResponse.json({ 
             order: nextOrder,
-            currentMax: validOrders.length > 0 ? validOrders[0].order : null
+            currentMax: validOrders.length > 0 ? validOrders[validOrders.length - 1].order : null
         }, {
             headers: {
                 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',

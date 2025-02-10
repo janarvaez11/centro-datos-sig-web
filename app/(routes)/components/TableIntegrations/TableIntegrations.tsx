@@ -80,6 +80,7 @@ const data: TableIntegrationsProps[] = [
 
 
 export const columns: ColumnDef<TableIntegrationsProps>[] = [
+    /*
     {
         accessorKey: "icon",
         header: "LOGO",
@@ -90,6 +91,7 @@ export const columns: ColumnDef<TableIntegrationsProps>[] = [
             </div>
         ),
     },
+    */
     {
         accessorKey: "app",
         header: "APLICATION",

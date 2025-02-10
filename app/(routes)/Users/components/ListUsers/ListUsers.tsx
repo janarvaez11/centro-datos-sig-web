@@ -12,7 +12,7 @@ export async function ListUsers(){
     const {userId} = auth()
 
     if(!userId){
-        return redirect("/")
+        return redirect("/Taks")
     }
 
     // Obtener todos los usuarios sin filtrar por userId
