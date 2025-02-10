@@ -9,26 +9,20 @@ import {columns} from './columns'
 
 
 export async function ListTools(){
-
-    const{userId} = auth()
-
+    const {userId} = auth()
 
     if(!userId){
         return redirect("/")
     }
 
+    // Obtener todas las herramientas sin filtrar por userId
     const tools = await db.tool.findMany({
-        where:{
-            userId,
-        },
-        orderBy:{
+        orderBy: {
             createdAt: "desc"
         }
-
-    })
+    });
 
     return(
-
         <DataTable columns={columns} data={tools}/>
     )
 }

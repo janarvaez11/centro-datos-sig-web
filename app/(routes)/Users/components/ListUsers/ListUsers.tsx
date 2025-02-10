@@ -9,28 +9,20 @@ import {columns} from './columns'
 
 
 export async function ListUsers(){
-
-    const{userId} = auth()
-
+    const {userId} = auth()
 
     if(!userId){
         return redirect("/")
     }
 
+    // Obtener todos los usuarios sin filtrar por userId
     const users = await db.user.findMany({
-        where:{
-            userId,
-        },
-        orderBy:{
+        orderBy: {
             createdAt: "desc"
         }
-
-    })
-
-
+    });
 
     return(
-
         <DataTable columns={columns} data={users}/>
     )
 }

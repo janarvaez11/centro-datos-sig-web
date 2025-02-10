@@ -9,28 +9,20 @@ import {columns} from './columns'
 
 
 export async function ListOrders(){
-
-    const{userId} = auth()
-
+    const {userId} = auth()
 
     if(!userId){
         return redirect("/")
     }
 
+    // Obtener todas las órdenes sin filtrar por userId
     const orders = await db.order.findMany({
-        where:{
-            userId,
-        },
-        orderBy:{
+        orderBy: {
             createdAt: "desc"
         }
-
-    })
-
-
+    });
 
     return(
-
         <DataTable columns={columns} data={orders}/>
     )
 }

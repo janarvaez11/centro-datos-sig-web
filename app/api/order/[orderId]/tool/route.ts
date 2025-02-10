@@ -13,7 +13,6 @@ export async function POST(
 
         if (!userId) {
             return new NextResponse("Unauthorized", { status: 401 })
-
         }
         
 
@@ -27,13 +26,34 @@ export async function POST(
             return new NextResponse("Order no encontrada", {status: 404})
         }
 
-
-        const tool = await db.tool.create({
-           data:  {
-            orderId: params.orderId,
-            ...data,
-           },
+        // Buscar si la herramienta ya existe por código
+        const existingTool = await db.tool.findFirst({
+            where: {
+                code: data.code
+            }
         });
+
+        let tool;
+        if (existingTool) {
+            // Actualizar la herramienta existente
+            tool = await db.tool.update({
+                where: {
+                    id: existingTool.id
+                },
+                data: {
+                    orderId: params.orderId,
+                    ...data,
+                }
+            });
+        } else {
+            // Crear nueva herramienta
+            tool = await db.tool.create({
+                data: {
+                    orderId: params.orderId,
+                    ...data,
+                }
+            });
+        }
 
         return NextResponse.json(tool);
 

@@ -85,7 +85,7 @@ export function FormCreateUser(props: FormCreateUserProps) {
             const userId = responseUser.data.id; // Suponiendo que el backend devuelve el ID
 
 
-            toast({ title: "Orden Creada Correctamente" })
+            toast({ title: "Usuario Creado Correctamente" })
 
 
 

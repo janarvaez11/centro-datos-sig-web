@@ -60,10 +60,11 @@ export function UserForm(props: UserFormsProps) {
                 title: "Usuario Actualizado"
             })
             router.refresh()
+            router.push("/Users")
 
         } catch (error) {
             toast({
-                title: "Error al actualizar los registros A",
+                title: "Error al actualizar el usuario",
                 variant: "destructive"
             })
 
@@ -112,9 +113,10 @@ export function UserForm(props: UserFormsProps) {
                                     </FormControl>
 
                                     <SelectContent>
-                                        <SelectItem value="Rol A">Rol A</SelectItem>
-                                        <SelectItem value="Rol B">Rol B</SelectItem>
-                                        <SelectItem value="Rol C">Rol C</SelectItem>
+                                        <SelectItem value="Cargo A">Cargo A</SelectItem>
+                                        <SelectItem value="Cargo B">Cargo B</SelectItem>
+                                        <SelectItem value="Cargo C">Cargo C</SelectItem>
+                                        <SelectItem value="Cargo D">Cargo D</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />

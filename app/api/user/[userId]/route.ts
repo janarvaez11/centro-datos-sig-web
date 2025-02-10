@@ -15,6 +15,7 @@ export async function PATCH(
             return new NextResponse("Unauthorized", { status: 401 })
         }
 
+        // Actualizar usuario
         const user = await db.user.update({
             where: {
                 id: userId
@@ -23,13 +24,25 @@ export async function PATCH(
                 ...values,
             },
         });
-        return NextResponse.json(user)
 
+        // Actualizar todos los contactos relacionados
+        await db.contact.updateMany({
+            where: {
+                userId: userId
+            },
+            data: {
+                name: values.name,
+                role: values.rol,
+                code: values.code,
+                function: values.function
+            }
+        });
+
+        return NextResponse.json(user)
     } catch (error) {
         console.log("[USER ID]", error);
         return new NextResponse("Error Interno", { status: 500 });
     }
-
 }
  
 export async function DELETE(req: Request, {params}: {params: {userId: string}}){
