@@ -43,7 +43,7 @@ export const dataToolsSidebar = [
     {
         icon: CircleHelpIcon,
         label: "AMEF",
-        href: "/faqs"
+        href: "/AMEF"
     },
     {
         icon: BarChart4,
