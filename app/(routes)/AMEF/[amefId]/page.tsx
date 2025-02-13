@@ -2,35 +2,32 @@ import { db } from "@/lib/db"
 import { auth } from "@clerk/nextjs"
 import { redirect } from "next/navigation"
 import { Header } from "./components/Header"
-import { UserInformation } from "./components/UserInformation"
-import { FooterUser } from "./components/FooterUser"
+import { FooterAmef } from "./components/FooterAmef"
 
 
 
-export default async function UserIdPage({ params }: { params: { userId: string } }) {
-    
+export default async function AmefIdPage({ params }: { params: { amefId: string } }) {
     //const { userId } = auth()
 
     //if (!userId) {
         //return redirect("/")
     //}
 
-    const user = await db.user.findUnique({
+    const amef = await db.amef.findUnique({
         where: {
-            id: params.userId,
+            id: params.amefId,
             //userId
         }
     })
 
-    if (!user) {
+    if (!amef) {
         return redirect("/")
     }
 
     return (
         <div>
             <Header/>
-            <UserInformation user={user}/>
-            <FooterUser userId={user.id}/>
+            <FooterAmef amefId={amef.id}/>
         </div>
     )
 }

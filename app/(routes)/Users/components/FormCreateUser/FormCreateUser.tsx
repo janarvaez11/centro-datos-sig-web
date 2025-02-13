@@ -157,10 +157,10 @@ export function FormCreateUser(props: FormCreateUserProps) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="Cargo A">Cargo A</SelectItem>
-                                            <SelectItem value="Cargo B">Cargo B</SelectItem>
-                                            <SelectItem value="Cargo C">Cargo C</SelectItem>
-                                            <SelectItem value="Cargo D">Cargo D</SelectItem>
+                                            <SelectItem value="Analista técnico">Analista técnico</SelectItem>
+                                            <SelectItem value="Supervisor">Supervisor</SelectItem>
+                                            <SelectItem value="Auditor">Auditor</SelectItem>
+                                            <SelectItem value="Técnico de calidad y procesos">Técnico de calidad y procesos</SelectItem>
                                         </SelectContent>
                                     </Select>
 
@@ -185,10 +185,10 @@ export function FormCreateUser(props: FormCreateUserProps) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="Funcion A">Funcion A</SelectItem>
-                                            <SelectItem value="Funcion B">Funcion B</SelectItem>
-                                            <SelectItem value="Funcion C">Funcion C</SelectItem>
-                                            <SelectItem value="Funcion D">Funcion D</SelectItem>
+                                            <SelectItem value="Responsable del area inspeccionada">Responsable del área inspeccionada</SelectItem>
+                                            <SelectItem value="Responsable de asistir">Responsable de asistir</SelectItem>
+                                            <SelectItem value="Responsable de inspeccionar">Responsable de inspeccionar</SelectItem>
+                                            <SelectItem value="Responsable de Aprobar">Responsable de aprobar</SelectItem>
                                         </SelectContent>
                                     </Select>
 

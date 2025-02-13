@@ -8,16 +8,16 @@ import { FooterTool } from "./components/FooterTool"
 
 
 export default async function UserIdPage({ params }: { params: { toolId: string } }) {
-    const { userId } = auth()
+    //const { userId } = auth()
 
-    if (!userId) {
-        return redirect("/")
-    }
+    //if (!userId) {
+        //return redirect("/")
+    //}
 
     const tool = await db.tool.findUnique({
         where: {
             id: params.toolId,
-            userId
+            //userId
         }
     })
 

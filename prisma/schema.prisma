@@ -88,3 +88,32 @@ model Event {
 
   @@index([orderId])
 }
+
+model Amef {
+  id                          String   @id @default(uuid())
+  order                       String
+  especificacionProceso       String
+  fig                         String
+  proyecto                    String
+  cliente                     String
+  elemento                    String
+  fechaDeteccion              String
+  nivelInspeccion             String
+  planMuestra                 String
+  modoFallo                   String
+  efecto                      String
+  causaModoFallo              String
+  medidasEnsayo               String
+  ocurrencia                  String
+  gravedad                    String
+  deteccion                   String
+  npr                         String
+  estadoNPR                   String
+  codigoColaboradorCT         String
+  codigoResponsableInspeccion String
+  accionImplementada          String
+  fechaValidacionCorreccion   String
+  costoReproceso              String
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+}

@@ -1,11 +1,9 @@
-import { HeaderOrders } from "./components/HeaderOrders"
-import { ListOrders } from "./components/ListOrders"
+import { ListRegistersAmef } from "./components/ListRegistersAmef"
 
-export default function Orders(){
+export default function AMEF(){
     return (
         <div>
-            <HeaderOrders/>
-            <ListOrders/>
+            <ListRegistersAmef/>
         </div>
     )
 }

@@ -8,16 +8,17 @@ import { FooterOrder } from "./components/FooterOrder"
 
 
 export default async function OrderIdPage({ params }: { params: { orderId: string } }) {
-    const { userId } = auth()
+    
+    //const { userId } = auth()
 
-    if (!userId) {
-        return redirect("/")
-    }
+    //if (!userId) {
+      //  return redirect("/")
+    //}
 
     const order = await db.order.findUnique({
         where: {
             id: params.orderId,
-            userId
+            //userId
         }
     })
 

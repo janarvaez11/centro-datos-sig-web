@@ -44,7 +44,7 @@ export function UserForm(props: UserFormsProps) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-      
+
             name: user.name,
             rol: user.rol,
             code: user.code,
@@ -100,7 +100,7 @@ export function UserForm(props: UserFormsProps) {
                         name="rol"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Escoja del Rol</FormLabel>
+                                <FormLabel>Escoja del Cargo</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
@@ -108,15 +108,15 @@ export function UserForm(props: UserFormsProps) {
 
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Seleccione el rol" />
+                                            <SelectValue placeholder="Seleccione el cargo" />
                                         </SelectTrigger>
                                     </FormControl>
 
                                     <SelectContent>
-                                        <SelectItem value="Cargo A">Cargo A</SelectItem>
-                                        <SelectItem value="Cargo B">Cargo B</SelectItem>
-                                        <SelectItem value="Cargo C">Cargo C</SelectItem>
-                                        <SelectItem value="Cargo D">Cargo D</SelectItem>
+                                        <SelectItem value="Analista técnico">Analista técnico</SelectItem>
+                                        <SelectItem value="Supervisor">Supervisor</SelectItem>
+                                        <SelectItem value="Auditor">Auditor</SelectItem>
+                                        <SelectItem value="Técnico de calidad y procesos">Técnico de calidad y procesos</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -143,17 +143,17 @@ export function UserForm(props: UserFormsProps) {
                                     </FormControl>
 
                                     <SelectContent>
-                                        <SelectItem value="Funcion A">Funcion A</SelectItem>
-                                        <SelectItem value="Funcion B">Funcion B</SelectItem>
-                                        <SelectItem value="Funcion C">Funcion C</SelectItem>
-                                        <SelectItem value="Funcion D">Funcion D</SelectItem>
+                                        <SelectItem value="Responsable del area inspeccionada">Responsable del área inspeccionada</SelectItem>
+                                        <SelectItem value="Responsable de asistir">Responsable de asistir</SelectItem>
+                                        <SelectItem value="Responsable de inspeccionar">Responsable de inspeccionar</SelectItem>
+                                        <SelectItem value="Responsable de Aprobar">Responsable de aprobar</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                  
+
 
                     {/* LOTE */}
                     <FormField
@@ -169,7 +169,7 @@ export function UserForm(props: UserFormsProps) {
                         )}
                     />
 
-                
+
                 </div>
                 <Button type="submit">Actualizar Usuario</Button>
 
