@@ -157,10 +157,32 @@ export function FormCreateUser(props: FormCreateUserProps) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="Analista técnico">Analista técnico</SelectItem>
+                                            <SelectItem value="Analista">Analista</SelectItem>
+                                            <SelectItem value="Armador">Armador</SelectItem>
+                                            <SelectItem value="Asistente">Asistente</SelectItem>
+                                            <SelectItem value="Auditor Externo">Auditor Externo</SelectItem>
+                                            <SelectItem value="Auditor Interno">Auditor Interno</SelectItem>
+                                            <SelectItem value="Auxiliar">Auxiliar</SelectItem>
+                                            <SelectItem value="Ayudante">Ayudante</SelectItem>
+                                            <SelectItem value="Chofer">Chofer</SelectItem>
+                                            <SelectItem value="Coordinador">Coordinador</SelectItem>
+                                            <SelectItem value="Especialista">Especialista</SelectItem>
+                                            <SelectItem value="Fiscalizador">Fiscalizador</SelectItem>
+                                            <SelectItem value="Gerente">Gerente</SelectItem>
+                                            <SelectItem value="Jefe">Jefe</SelectItem>
+                                            <SelectItem value="Médico">Médico</SelectItem>
+                                            <SelectItem value="Mensajero">Mensajero</SelectItem>
+                                            <SelectItem value="Montador">Montador</SelectItem>
+                                            <SelectItem value="Operador">Operador</SelectItem>
+                                            <SelectItem value="Paramédico">Paramédico</SelectItem>
+                                            <SelectItem value="Portero">Portero</SelectItem>
+                                            <SelectItem value="Soldador">Soldador</SelectItem>
+                                            <SelectItem value="Portero">Portero</SelectItem>
                                             <SelectItem value="Supervisor">Supervisor</SelectItem>
-                                            <SelectItem value="Auditor">Auditor</SelectItem>
-                                            <SelectItem value="Técnico de calidad y procesos">Técnico de calidad y procesos</SelectItem>
+                                            <SelectItem value="Supervisor Operativo">Supervisor Operativo</SelectItem>
+                                            <SelectItem value="Técnico de Calidad y Procesos">Técnico de Calidad y Procesos</SelectItem>
+                                            <SelectItem value="Trabajador Social">Trabajador Social</SelectItem>
+                                            <SelectItem value="Otros">Otros</SelectItem>
                                         </SelectContent>
                                     </Select>
 

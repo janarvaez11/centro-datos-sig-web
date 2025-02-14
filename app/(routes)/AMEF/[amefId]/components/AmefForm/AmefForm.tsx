@@ -272,7 +272,7 @@ export function AmefForm(props: AmefFormsProps) {
 
 
                 </div>
-                <Button type="submit">Actualizar</Button>
+                <Button type="submit">Completar registro</Button>
 
             </form>
         </Form>

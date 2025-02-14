@@ -24,6 +24,7 @@ export function Navbar() {
 
             </div>
 
+
             <div className="relative w-[300px]">
                 <Input placeholder="Search......." className="rounded-lg" />
                 <Search strokeWidth={1} className="absolute top-2 right-2" />
