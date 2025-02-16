@@ -5,7 +5,7 @@ export async function POST(req: Request) {
     try {
         const data = await req.json();
 
-        // Obtener la orden relacionada para obtener los datos existentes
+        // Buscar la orden por el número de orden
         const order = await db.order.findFirst({
             where: {
                 order: data.order
@@ -13,10 +13,15 @@ export async function POST(req: Request) {
         });
 
         if (!order) {
-            return new NextResponse("Orden no encontrada", { status: 404 });
+            return new NextResponse("Orden no encontrada", { 
+                status: 404,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
         }
 
-        // Crear el registro AMEF combinando datos de la orden y los nuevos datos
+        // Crear el registro AMEF
         const amef = await db.amef.create({
             data: {
                 order: order.order,
@@ -24,8 +29,8 @@ export async function POST(req: Request) {
                 fig: order.fig,
                 proyecto: order.proyecto,
                 cliente: order.cliente,
-                elemento: data.elemento,
-                fechaDeteccion: data.fechaDeteccion,
+                elemento: data.elemento, // Medición de Power Apps
+                fechaDeteccion: data.fechaDeteccion, // Fecha de Power Apps
                 nivelInspeccion: order.nivelInspeccion,
                 planMuestra: order.planMuestra,
                 // Campos que se completarán después
@@ -46,9 +51,18 @@ export async function POST(req: Request) {
             }
         });
 
-        return NextResponse.json(amef);
+        return NextResponse.json(amef, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     } catch (error) {
         console.error("[AMEF_CREATE]", error);
-        return new NextResponse("Error interno", { status: 500 });
+        return new NextResponse("Error interno", { 
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     }
 } 

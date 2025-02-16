@@ -141,8 +141,6 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
             lote: "",
             nivelInspeccion: "",
             planMuestra: ""
-
-
         },
     })
 
@@ -177,20 +175,22 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        ordenInspeccion: values.order,
-                        estadoInspeccion: values.estado,
+                        order: values.order,
+                        estado: values.estado,
                         tipoInspeccion: values.tipoInspeccion,
-                        fechaInspeccion: values.fechaProgramada,
-                        procesoProduccionInspeccion: values.procesoProduccion,
-                        procesoEspecificacionInspeccion: values.especificacionProceso,
-                        muestraInspeccion: values.muestra,
-                        clienteInspeccion: values.cliente,
-                        proyectoInspeccion: values.proyecto,
-                        figInspeccion: values.fig,
-                        areaInspeccion: values.area,
-                        designacionInspeccion: values.designacion,
-                        normaInspeccion: values.norma,
-                        loteInspeccion: values.lote,
+                        fechaProgramada: values.fechaProgramada,
+                        procesoProduccion: values.procesoProduccion,
+                        especificacionProceso: values.especificacionProceso,
+                        muestra: values.muestra,
+                        cliente: values.cliente,
+                        proyecto: values.proyecto,
+                        fig: values.fig,
+                        area: values.area,
+                        designacion: values.designacion,
+                        norma: values.norma,
+                        lote: values.lote,
+                        nivelInspeccion: values.nivelInspeccion,
+                        planMuestra: values.planMuestra
                     }),
                 });
                 
