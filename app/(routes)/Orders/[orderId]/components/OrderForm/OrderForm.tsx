@@ -154,8 +154,8 @@ export function OrderForm(props: OrderFormsProps) {
                                     </FormControl>
 
                                     <SelectContent>
-                                        <SelectItem value="En proceso">En Proceso</SelectItem>
-                                        <SelectItem value="Producto terminado">Producto Terminado</SelectItem>
+                                        <SelectItem value="En Proceso">En Proceso</SelectItem>
+                                        <SelectItem value="Producto Terminado">Producto Terminado</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -224,11 +224,11 @@ export function OrderForm(props: OrderFormsProps) {
 
                                     <SelectContent>
                                         <SelectItem value="Abastecimiento">Abastecimiento</SelectItem>
-                                        <SelectItem value="Torres y apernados">Torres y Apernados</SelectItem>
-                                        <SelectItem value="Armado y soldadura">Armado y Soldadura</SelectItem>
+                                        <SelectItem value="Torres y Apernados">Torres y Apernados</SelectItem>
+                                        <SelectItem value="Armado y Soldadura">Armado y Soldadura</SelectItem>
                                         <SelectItem value="Pintura">Pintura</SelectItem>
                                         <SelectItem value="Galvanizado">Galvanizado</SelectItem>
-                                        <SelectItem value="Pmc">PMC</SelectItem>
+                                        <SelectItem value="PMC">PMC</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -256,9 +256,9 @@ export function OrderForm(props: OrderFormsProps) {
                                     </FormControl>
 
                                     <SelectContent>
-                                        <SelectItem value="Inspeccion grating">Inspección Grating</SelectItem>
-                                        <SelectItem value="Inspeccion pasamanos">Inspección Pasamanos</SelectItem>
-                                        <SelectItem value="Inspeccion bandejas">Inspección Bandejas Portacables</SelectItem>
+                                        <SelectItem value="Inspección Grating">Inspección Grating</SelectItem>
+                                        <SelectItem value="Inspección Pasamanos">Inspección Pasamanos</SelectItem>
+                                        <SelectItem value="Inspección Bandejas Portacables">Inspección Bandejas Portacables</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -301,7 +301,7 @@ export function OrderForm(props: OrderFormsProps) {
                                     <SelectContent>
                                         <SelectItem value="Simple">Simple</SelectItem>
                                         <SelectItem value="Doble">Doble</SelectItem>
-                                        <SelectItem value="Multiple">Múltiple</SelectItem>
+                                        <SelectItem value="Múltiple">Múltiple</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -386,8 +386,8 @@ export function OrderForm(props: OrderFormsProps) {
                                     </FormControl>
 
                                     <SelectContent>
-                                        <SelectItem value="Pmc produccion">PMC PRODUCCION</SelectItem>
-                                        <SelectItem value="Bodega">BODEGA</SelectItem>
+                                        <SelectItem value="Pmc Produccion">Pmc Produccion</SelectItem>
+                                        <SelectItem value="Bodega">Bodega</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
