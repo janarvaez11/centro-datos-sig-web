@@ -1,26 +1,60 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+// Desactivar la verificación de autenticación para esta ruta
+export const config = {
+    api: {
+        bodyParser: true,
+        externalResolver: true,
+    },
+};
+
+export async function OPTIONS(req: Request) {
+    return new NextResponse(null, {
+        status: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': '*',
+        },
+    });
+}
+
 export async function POST(req: Request) {
     try {
-        const data = await req.json();
+        // Permitir cualquier origen
+        if (req.method === 'OPTIONS') {
+            return new NextResponse(null, {
+                status: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                    'Access-Control-Allow-Headers': '*',
+                },
+            });
+        }
 
-        // Validar que se reciban los datos necesarios
+        const data = await req.json();
+        console.log("Webhook datos recibidos:", data);
+
+        // Validar datos recibidos
         if (!data.order || !data.elemento) {
             return new NextResponse(
                 JSON.stringify({
-                    error: "Se requiere el número de orden y el elemento"
+                    success: false,
+                    error: "Datos incompletos"
                 }), 
                 { 
-                    status: 400,
+                    status: 200, // Cambiado a 200 para evitar errores en Power Automate
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
                     }
                 }
             );
         }
 
-        // Buscar la orden por el número de orden
+        // Buscar la orden
         const order = await db.order.findFirst({
             where: {
                 order: data.order
@@ -30,18 +64,20 @@ export async function POST(req: Request) {
         if (!order) {
             return new NextResponse(
                 JSON.stringify({
+                    success: false,
                     error: "Orden no encontrada"
                 }), 
                 { 
-                    status: 404,
+                    status: 200, // Cambiado a 200 para evitar errores en Power Automate
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
                     }
                 }
             );
         }
 
-        // Crear el registro AMEF usando la fecha programada de la orden
+        // Crear registro AMEF
         const amef = await db.amef.create({
             data: {
                 order: order.order,
@@ -49,11 +85,10 @@ export async function POST(req: Request) {
                 fig: order.fig,
                 proyecto: order.proyecto,
                 cliente: order.cliente,
-                elemento: data.elemento, // Elemento que viene de Power Apps
-                fechaDeteccion: order.fechaProgramada, // Usamos la fecha programada de la orden
+                elemento: data.elemento,
+                fechaDeteccion: order.fechaProgramada,
                 nivelInspeccion: order.nivelInspeccion,
                 planMuestra: order.planMuestra,
-                // Campos que se completarán después
                 modoFallo: "",
                 efecto: "",
                 causaModoFallo: "",
@@ -74,32 +109,28 @@ export async function POST(req: Request) {
         return new NextResponse(
             JSON.stringify({
                 success: true,
-                data: amef
+                message: "Registro creado exitosamente"
             }), 
             {
                 status: 200,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*', // Permitir solicitudes desde cualquier origen
-                    'Access-Control-Allow-Methods': 'POST',
-                    'Access-Control-Allow-Headers': 'Content-Type'
+                    'Access-Control-Allow-Origin': '*'
                 }
             }
         );
     } catch (error) {
-        console.error("[AMEF_CREATE]", error);
+        console.error("Error en webhook:", error);
         return new NextResponse(
             JSON.stringify({
-                error: "Error interno del servidor",
-                details: error instanceof Error ? error.message : "Error desconocido"
+                success: false,
+                error: "Error interno"
             }), 
             { 
-                status: 500,
+                status: 200, // Cambiado a 200 para evitar errores en Power Automate
                 headers: {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST',
-                    'Access-Control-Allow-Headers': 'Content-Type'
+                    'Access-Control-Allow-Origin': '*'
                 }
             }
         );

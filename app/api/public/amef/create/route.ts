@@ -1,26 +1,41 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+// Función para manejar la solicitud OPTIONS (CORS)
+export async function OPTIONS(req: Request) {
+    return new NextResponse(null, {
+        status: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+        },
+    });
+}
+
 export async function POST(req: Request) {
     try {
         const data = await req.json();
+        console.log("Datos recibidos:", data); // Para debugging
 
-        // Validar que se reciban los datos necesarios
+        // Validar datos recibidos
         if (!data.order || !data.elemento) {
+            console.log("Datos faltantes:", { data }); // Para debugging
             return new NextResponse(
                 JSON.stringify({
-                    error: "Se requiere el número de orden y el elemento"
+                    error: "Se requiere el número de orden (order) y el elemento"
                 }), 
                 { 
                     status: 400,
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
                     }
                 }
             );
         }
 
-        // Buscar la orden por el número de orden
+        // Buscar la orden
         const order = await db.order.findFirst({
             where: {
                 order: data.order
@@ -28,20 +43,22 @@ export async function POST(req: Request) {
         });
 
         if (!order) {
+            console.log("Orden no encontrada:", data.order); // Para debugging
             return new NextResponse(
                 JSON.stringify({
-                    error: "Orden no encontrada"
+                    error: "Orden no encontrada: " + data.order
                 }), 
                 { 
                     status: 404,
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
                     }
                 }
             );
         }
 
-        // Crear el registro AMEF usando la fecha programada de la orden
+        // Crear registro AMEF
         const amef = await db.amef.create({
             data: {
                 order: order.order,
@@ -49,11 +66,10 @@ export async function POST(req: Request) {
                 fig: order.fig,
                 proyecto: order.proyecto,
                 cliente: order.cliente,
-                elemento: data.elemento, // Elemento que viene de Power Apps
-                fechaDeteccion: order.fechaProgramada, // Usamos la fecha programada de la orden
+                elemento: data.elemento,
+                fechaDeteccion: order.fechaProgramada,
                 nivelInspeccion: order.nivelInspeccion,
                 planMuestra: order.planMuestra,
-                // Campos que se completarán después
                 modoFallo: "",
                 efecto: "",
                 causaModoFallo: "",
@@ -71,35 +87,34 @@ export async function POST(req: Request) {
             }
         });
 
+        console.log("AMEF creado exitosamente:", amef); // Para debugging
+
         return new NextResponse(
             JSON.stringify({
                 success: true,
+                message: "Registro AMEF creado exitosamente",
                 data: amef
             }), 
             {
                 status: 200,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*', // Permitir solicitudes desde cualquier origen
-                    'Access-Control-Allow-Methods': 'POST',
-                    'Access-Control-Allow-Headers': 'Content-Type'
+                    'Access-Control-Allow-Origin': '*'
                 }
             }
         );
     } catch (error) {
-        console.error("[AMEF_CREATE]", error);
+        console.error("Error en creación de AMEF:", error); // Para debugging
         return new NextResponse(
             JSON.stringify({
-                error: "Error interno del servidor",
+                error: "Error al crear el registro AMEF",
                 details: error instanceof Error ? error.message : "Error desconocido"
             }), 
             { 
                 status: 500,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST',
-                    'Access-Control-Allow-Headers': 'Content-Type'
+                    'Access-Control-Allow-Origin': '*'
                 }
             }
         );
