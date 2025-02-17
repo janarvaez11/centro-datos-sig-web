@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs"
 import { redirect } from "next/navigation"
 import { Header } from "./components/Header"
 import { FooterAmef } from "./components/FooterAmef"
+import {  AmefInformation } from "./components/AmefInformation"
 
 
 
@@ -27,6 +28,7 @@ export default async function AmefIdPage({ params }: { params: { amefId: string 
     return (
         <div>
             <Header/>
+            <AmefInformation amef={amef}/>
             <FooterAmef amefId={amef.id}/>
         </div>
     )
