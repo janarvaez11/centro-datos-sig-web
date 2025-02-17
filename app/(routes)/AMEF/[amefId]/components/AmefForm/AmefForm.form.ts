@@ -3,11 +3,11 @@ import {z} from "zod";
 export const formSchema = z.object({
 
     order: z.string().min(2),
-    especificacionProceso: z.string().min(2),                     
+    procesoProduccion: z.string().min(2),                     
     fig: z.string().min(2),                        
     proyecto: z.string().min(2),                    
     cliente: z.string().min(2),                    
-    elemento: z.string().min(2),                   
+    elemento: z.string().min(1),                   
     fechaDeteccion: z.string().min(2),              
     nivelInspeccion: z.string().min(2),
     planMuestra: z.string().min(2),            

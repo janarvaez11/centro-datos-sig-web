@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { Contact } from "lucide-react";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
         const amef = await db.amef.create({
             data: {
                 order: order.order,
-                especificacionProceso: order.especificacionProceso,
+                especificacionProceso: order.procesoProduccion,
                 fig: order.fig,
                 proyecto: order.proyecto,
                 cliente: order.cliente,

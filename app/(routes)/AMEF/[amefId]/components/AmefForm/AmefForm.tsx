@@ -45,7 +45,7 @@ export function AmefForm(props: AmefFormsProps) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             order: amef.order,
-            especificacionProceso: amef.especificacionProceso,
+            procesoProduccion: amef.especificacionProceso,
             fig: amef.fig,
             proyecto: amef.proyecto,
             cliente: amef.cliente,
@@ -111,7 +111,7 @@ export function AmefForm(props: AmefFormsProps) {
                     {/* PROCESO PRODUCCION */}
                     <FormField
                         control={form.control}
-                        name="especificacionProceso"
+                        name="procesoProduccion"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Proceso de Producción</FormLabel>
@@ -128,11 +128,11 @@ export function AmefForm(props: AmefFormsProps) {
 
                                     <SelectContent>
                                         <SelectItem value="Abastecimiento">Abastecimiento</SelectItem>
-                                        <SelectItem value="Torres y apernados">Torres y Apernados</SelectItem>
-                                        <SelectItem value="Armado y soldadura">Armado y Soldadura</SelectItem>
+                                        <SelectItem value="Torres y Apernados">Torres y Apernados</SelectItem>
+                                        <SelectItem value="Armado y Soldadura">Armado y Soldadura</SelectItem>
                                         <SelectItem value="Pintura">Pintura</SelectItem>
                                         <SelectItem value="Galvanizado">Galvanizado</SelectItem>
-                                        <SelectItem value="Pmc">PMC</SelectItem>
+                                        <SelectItem value="PMC">PMC</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -261,7 +261,7 @@ export function AmefForm(props: AmefFormsProps) {
                                     <SelectContent>
                                         <SelectItem value="Simple">Simple</SelectItem>
                                         <SelectItem value="Doble">Doble</SelectItem>
-                                        <SelectItem value="Multiple">Múltiple</SelectItem>
+                                        <SelectItem value="Múltiple">Múltiple</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
