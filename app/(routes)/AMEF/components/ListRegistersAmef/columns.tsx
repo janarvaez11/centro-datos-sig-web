@@ -22,7 +22,7 @@ export const columns: ColumnDef<Amef>[] = [
         },
     },
     {
-        accessorKey: "especificacionProceso",
+        accessorKey: "procesoProduccion",
         header: "Proceso",
     },
     {

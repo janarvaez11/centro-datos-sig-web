@@ -12,13 +12,11 @@ export function AmefInformation(props: AmefInformationProps) {
     const { amef } = props
 
     return (
-<div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto,auto] lg:gap-x-10 gap-y-4 lg:grid-areas-[ 'amef']">
-    {/* Amef */}
-    <div className="rounded-lg bg-background shadow-md hover:shadow-lg p-4 lg:col-start-1 lg:row-span-2">
-        <AmefForm amef={amef} />
-    </div>
-
-</div>
-
+        <div className="grid grid-cols-1 lg:grid-cols-1 lg:grid-rows-[auto,auto] lg:gap-x-10 gap-y-4 lg:grid-areas-[ 'amef']">
+            {/* Amef */}
+            <div className="rounded-lg bg-background shadow-md hover:shadow-lg p-4 lg:col-start-1 lg:row-span-2">
+                <AmefForm amef={amef} />
+            </div>
+        </div>
     )
 }

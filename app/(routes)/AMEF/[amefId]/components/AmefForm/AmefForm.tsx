@@ -32,6 +32,7 @@ import { toast } from "@/hooks/use-toast"
 
 import { UploadButton } from "@/utils/uploadthing"
 import { formSchema } from "./AmefForm.form"
+import { Separator } from "@radix-ui/react-select"
 
 
 
@@ -269,6 +270,204 @@ export function AmefForm(props: AmefFormsProps) {
                         )}
                     />
 
+                    <Separator className="col-span-2" />
+                    <h2 className="col-span-2 text-lg font-semibold">Completar los registros AMEF</h2>
+
+                    {/* MODO DE FALLO */}
+                    <FormField
+                        control={form.control}
+                        name="modoFallo"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Modo de Fallo</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Modo de fallo" type="text" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* EFECTO */}
+                    <FormField
+                        control={form.control}
+                        name="efecto"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Efecto</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Efecto" type="text" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* CAUSA MODO FALLO */}
+                    <FormField
+                        control={form.control}
+                        name="causaModoFallo"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Causa Modo de Fallo</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Causa modo de fallo" type="text" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* MEDIDAS DE ENSAYO */}
+                    <FormField
+                        control={form.control}
+                        name="medidasEnsayo"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Medidas de Ensayo</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Medidas de ensayo" type="text" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* OCURRENCIA */}
+                    <FormField
+                        control={form.control}
+                        name="ocurrencia"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Ocurrencia</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Ocurrencia" type="number" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* GRAVEDAD */}
+                    <FormField
+                        control={form.control}
+                        name="gravedad"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Gravedad</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Gravedad" type="number" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* DETECCION */}
+                    <FormField
+                        control={form.control}
+                        name="deteccion"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Detección</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Detección" type="number" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* NPR */}
+                    <FormField
+                        control={form.control}
+                        name="npr"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>NPR</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="NPR" type="number" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* ESTADO NPR */}
+                    <FormField
+                        control={form.control}
+                        name="estadoNPR"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Estado NPR</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Estado NPR" type="text" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* CODIGO COLABORADOR CT */}
+                    <FormField
+                        control={form.control}
+                        name="codigoColaboradorCT"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Código Colaborador CT</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Código Colaborador CT" type="number" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* CODIGO RESPONSABLE INSPECCION */}
+                    <FormField
+                        control={form.control}
+                        name="codigoResponsableInspeccion"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Código Responsable Inspección</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Código Responsable Inspección" type="number" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* ACCION IMPLEMENTADA */}
+                    <FormField
+                        control={form.control}
+                        name="accionImplementada"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Acción Implementada</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Acción Implementada" type="text" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* FECHA VALIDACION CORRECCION */}
+                    <FormField
+                        control={form.control}
+                        name="fechaValidacionCorreccion"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Fecha Validación Corrección</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Fecha Validación Corrección" type="date" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* COSTO REPROCESO */}
+                    <FormField
+                        control={form.control}
+                        name="costoReproceso"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Costo Reproceso</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Costo Reproceso" type="number" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
 
 
                 </div>
