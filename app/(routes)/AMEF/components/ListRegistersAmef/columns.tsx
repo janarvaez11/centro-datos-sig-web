@@ -46,12 +46,12 @@ export const columns: ColumnDef<Amef>[] = [
         header: "Fecha detección",
     },
     {
-        accessorKey: "codigoColaboradorCT",
-        header: "Colaborador Centro de Trabajo",
+        accessorKey: "nivelInspeccion",
+        header: "Nivel de Inspección Aplicado",
     },
     {
-        accessorKey: "codigoResponsableInspeccion",
-        header: "Colaborador Responsable Inspeccion",
+        accessorKey: "planMuestra",
+        header: "Plan de Muestra Aplicado",
     },
 
     {

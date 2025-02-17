@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from "axios"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 
 
@@ -31,10 +31,36 @@ import { toast } from "@/hooks/use-toast"
 
 
 import { UploadButton } from "@/utils/uploadthing"
-import { formSchema } from "./AmefForm.form"
+import { amefFormSchema } from "./AmefForm.form"
 import { Separator } from "@radix-ui/react-select"
 
-
+// Función para calcular el NPR y determinar el estado
+function calculateNPRAndState(ocurrencia: string, gravedad: string, deteccion: string) {
+    const o = parseInt(ocurrencia) || 0;
+    const g = parseInt(gravedad) || 0;
+    const d = parseInt(deteccion) || 0;
+    
+    const npr = o * g * d;
+    
+    let estado = "";
+    let color = "";
+    
+    if (npr >= 0 && npr <= 100) {
+        estado = "Baja";
+        color = "bg-green-500";
+    } else if (npr >= 101 && npr <= 500) {
+        estado = "Moderado";
+        color = "bg-yellow-500";
+    } else if (npr >= 501 && npr <= 800) {
+        estado = "Muy Alta";
+        color = "bg-orange-500";
+    } else if (npr >= 801 && npr <= 1000) {
+        estado = "Crítico";
+        color = "bg-red-500";
+    }
+    
+    return { npr: npr.toString(), estado, color };
+}
 
 export function AmefForm(props: AmefFormsProps) {
     const { amef } = props
@@ -42,8 +68,8 @@ export function AmefForm(props: AmefFormsProps) {
 
     const [photoUploaded, setPhotoUploaded] = useState(false)
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof amefFormSchema>>({
+        resolver: zodResolver(amefFormSchema),
         defaultValues: {
             order: amef.order,
             procesoProduccion: amef.procesoProduccion,
@@ -71,7 +97,7 @@ export function AmefForm(props: AmefFormsProps) {
         }
     })
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const onSubmit = async (values: z.infer<typeof amefFormSchema>) => {
         try {
             await axios.patch(`/api/amef/${amef.id}`, values)
             toast({
@@ -89,6 +115,17 @@ export function AmefForm(props: AmefFormsProps) {
 
     }
 
+    // Efecto para actualizar NPR y estado cuando cambien los valores
+    useEffect(() => {
+        const ocurrencia = form.watch("ocurrencia");
+        const gravedad = form.watch("gravedad");
+        const deteccion = form.watch("deteccion");
+        
+        const { npr, estado } = calculateNPRAndState(ocurrencia, gravedad, deteccion);
+        
+        form.setValue("npr", npr);
+        form.setValue("estadoNPR", estado);
+    }, [form.watch("ocurrencia"), form.watch("gravedad"), form.watch("deteccion")]);
 
     return (
 
@@ -335,10 +372,17 @@ export function AmefForm(props: AmefFormsProps) {
                         name="ocurrencia"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Ocurrencia</FormLabel>
+                                <FormLabel>Ocurrencia (1-10)</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Ocurrencia" type="number" {...field} />
+                                    <Input 
+                                        placeholder="1-10" 
+                                        type="number" 
+                                        min="1" 
+                                        max="10"
+                                        {...field} 
+                                    />
                                 </FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
@@ -349,10 +393,17 @@ export function AmefForm(props: AmefFormsProps) {
                         name="gravedad"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Gravedad</FormLabel>
+                                <FormLabel>Gravedad (1-10)</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Gravedad" type="number" {...field} />
+                                    <Input 
+                                        placeholder="1-10" 
+                                        type="number" 
+                                        min="1" 
+                                        max="10"
+                                        {...field} 
+                                    />
                                 </FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
@@ -363,10 +414,17 @@ export function AmefForm(props: AmefFormsProps) {
                         name="deteccion"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Detección</FormLabel>
+                                <FormLabel>Detección (1-10)</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Detección" type="number" {...field} />
+                                    <Input 
+                                        placeholder="1-10" 
+                                        type="number" 
+                                        min="1" 
+                                        max="10"
+                                        {...field} 
+                                    />
                                 </FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
@@ -379,7 +437,11 @@ export function AmefForm(props: AmefFormsProps) {
                             <FormItem>
                                 <FormLabel>NPR</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="NPR" type="number" {...field} />
+                                    <Input 
+                                        {...field} 
+                                        readOnly 
+                                        className="font-bold"
+                                    />
                                 </FormControl>
                             </FormItem>
                         )}
@@ -389,14 +451,25 @@ export function AmefForm(props: AmefFormsProps) {
                     <FormField
                         control={form.control}
                         name="estadoNPR"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Estado NPR</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Estado NPR" type="text" {...field} />
-                                </FormControl>
-                            </FormItem>
-                        )}
+                        render={({ field }) => {
+                            const ocurrencia = form.watch("ocurrencia");
+                            const gravedad = form.watch("gravedad");
+                            const deteccion = form.watch("deteccion");
+                            const { color } = calculateNPRAndState(ocurrencia, gravedad, deteccion);
+                            
+                            return (
+                                <FormItem>
+                                    <FormLabel>Estado NPR</FormLabel>
+                                    <FormControl>
+                                        <Input 
+                                            {...field} 
+                                            readOnly 
+                                            className={`font-bold ${color}`}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            );
+                        }}
                     />
 
                     {/* CODIGO COLABORADOR CT */}

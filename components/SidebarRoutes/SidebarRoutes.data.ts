@@ -22,11 +22,13 @@ export const dataGeneralSidebar = [
         label: "Ordenes",
         href: "/Orders"
     },
+    /*
     {
         icon: Calendar,
         label: "Calendario",
         href: "/Tasks"
     },
+    */
     {
         icon: User,
         label: "Usuarios",

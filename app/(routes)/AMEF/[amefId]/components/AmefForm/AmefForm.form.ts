@@ -1,6 +1,6 @@
-import {z} from "zod";
+import * as z from "zod";
 
-export const formSchema = z.object({
+export const amefFormSchema = z.object({
 
     order: z.string().min(2),
     procesoProduccion: z.string().min(2),                     
@@ -15,11 +15,23 @@ export const formSchema = z.object({
     efecto: z.string().min(2),                      
     causaModoFallo: z.string().min(2),              
     medidasEnsayo: z.string().min(2),               
-    ocurrencia: z.string().min(2),                  
-    gravedad: z.string().min(2),                    
-    deteccion: z.string().min(2),                  
-    npr: z.string().min(2),                         
-    estadoNPR: z.string().min(2),                      
+    ocurrencia: z.string()
+        .refine((val) => {
+            const num = parseInt(val);
+            return !isNaN(num) && num >= 1 && num <= 10;
+        }, "Debe ser un número entre 1 y 10"),                  
+    gravedad: z.string()
+        .refine((val) => {
+            const num = parseInt(val);
+            return !isNaN(num) && num >= 1 && num <= 10;
+        }, "Debe ser un número entre 1 y 10"),                    
+    deteccion: z.string()
+        .refine((val) => {
+            const num = parseInt(val);
+            return !isNaN(num) && num >= 1 && num <= 10;
+        }, "Debe ser un número entre 1 y 10"),                  
+    npr: z.string(),                         
+    estadoNPR: z.string(),                      
     codigoColaboradorCT: z.string().min(2),         
     codigoResponsableInspeccion: z.string().min(2), 
     accionImplementada: z.string().min(2),          
@@ -27,3 +39,5 @@ export const formSchema = z.object({
     costoReproceso: z.string().min(2)              
 
 })
+
+export type AmefFormValues = z.infer<typeof amefFormSchema>
