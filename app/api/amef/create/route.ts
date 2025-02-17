@@ -46,7 +46,7 @@ export async function POST(req: Request) {
         const amef = await db.amef.create({
             data: {
                 order: order.order,
-                especificacionProceso: order.procesoProduccion,
+                procesoProduccion: order.procesoProduccion,
                 fig: order.fig,
                 proyecto: order.proyecto,
                 cliente: order.cliente,

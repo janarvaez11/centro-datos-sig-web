@@ -45,7 +45,7 @@ export function AmefForm(props: AmefFormsProps) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             order: amef.order,
-            procesoProduccion: amef.especificacionProceso,
+            procesoProduccion: amef.procesoProduccion,
             fig: amef.fig,
             proyecto: amef.proyecto,
             cliente: amef.cliente,
