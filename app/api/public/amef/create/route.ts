@@ -1,32 +1,36 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-// Función para manejar la solicitud OPTIONS (CORS)
+// Función para manejar preflight requests
 export async function OPTIONS(req: Request) {
     return new NextResponse(null, {
         status: 200,
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         },
     });
 }
 
 export async function POST(req: Request) {
     try {
+        // Log para debugging
+        console.log("Recibiendo solicitud POST en /api/public/amef/create");
+        
         const data = await req.json();
-        console.log("Datos recibidos:", data); // Para debugging
+        console.log("Datos recibidos:", data);
 
         // Validar datos recibidos
         if (!data.order || !data.elemento) {
-            console.log("Datos faltantes:", { data }); // Para debugging
+            console.log("Datos faltantes:", { data });
             return new NextResponse(
                 JSON.stringify({
-                    error: "Se requiere el número de orden (order) y el elemento"
+                    success: false,
+                    message: "Se requieren los campos 'order' y 'elemento'"
                 }), 
                 { 
-                    status: 400,
+                    status: 200,
                     headers: {
                         'Content-Type': 'application/json',
                         'Access-Control-Allow-Origin': '*'
@@ -43,13 +47,14 @@ export async function POST(req: Request) {
         });
 
         if (!order) {
-            console.log("Orden no encontrada:", data.order); // Para debugging
+            console.log("Orden no encontrada:", data.order);
             return new NextResponse(
                 JSON.stringify({
-                    error: "Orden no encontrada: " + data.order
+                    success: false,
+                    message: "Orden no encontrada"
                 }), 
                 { 
-                    status: 404,
+                    status: 200,
                     headers: {
                         'Content-Type': 'application/json',
                         'Access-Control-Allow-Origin': '*'
@@ -87,13 +92,12 @@ export async function POST(req: Request) {
             }
         });
 
-        console.log("AMEF creado exitosamente:", amef); // Para debugging
+        console.log("AMEF creado exitosamente:", amef);
 
         return new NextResponse(
             JSON.stringify({
                 success: true,
-                message: "Registro AMEF creado exitosamente",
-                data: amef
+                message: "Registro AMEF creado exitosamente"
             }), 
             {
                 status: 200,
@@ -104,14 +108,15 @@ export async function POST(req: Request) {
             }
         );
     } catch (error) {
-        console.error("Error en creación de AMEF:", error); // Para debugging
+        console.error("Error en creación de AMEF:", error);
         return new NextResponse(
             JSON.stringify({
-                error: "Error al crear el registro AMEF",
-                details: error instanceof Error ? error.message : "Error desconocido"
+                success: false,
+                message: "Error al crear el registro AMEF",
+                error: error instanceof Error ? error.message : "Error desconocido"
             }), 
             { 
-                status: 500,
+                status: 200,
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*'
