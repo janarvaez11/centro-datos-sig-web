@@ -36,9 +36,17 @@ import { Separator } from "@radix-ui/react-select"
 
 // Función para calcular el NPR y determinar el estado
 function calculateNPRAndState(ocurrencia: string, gravedad: string, deteccion: string) {
-    const o = parseInt(ocurrencia) || 0;
-    const g = parseInt(gravedad) || 0;
-    const d = parseInt(deteccion) || 0;
+    const o = parseInt(ocurrencia);
+    const g = parseInt(gravedad);
+    const d = parseInt(deteccion);
+    
+    // Verificar que todos los valores sean válidos
+    if (isNaN(o) || isNaN(g) || isNaN(d) || 
+        o < 1 || o > 10 || 
+        g < 1 || g > 10 || 
+        d < 1 || d > 10) {
+        return { npr: "", estado: "", color: "" };
+    }
     
     const npr = o * g * d;
     
@@ -380,6 +388,19 @@ export function AmefForm(props: AmefFormsProps) {
                                         min="1" 
                                         max="10"
                                         {...field} 
+                                        onChange={(e) => {
+                                            const value = parseInt(e.target.value);
+                                            if (!isNaN(value) && value >= 1 && value <= 10) {
+                                                field.onChange(e);
+                                            } else {
+                                                field.onChange({ target: { value: "" } });
+                                            }
+                                        }}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'e' || e.key === '+' || e.key === '-' || e.key === '.') {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -401,6 +422,19 @@ export function AmefForm(props: AmefFormsProps) {
                                         min="1" 
                                         max="10"
                                         {...field} 
+                                        onChange={(e) => {
+                                            const value = parseInt(e.target.value);
+                                            if (!isNaN(value) && value >= 1 && value <= 10) {
+                                                field.onChange(e);
+                                            } else {
+                                                field.onChange({ target: { value: "" } });
+                                            }
+                                        }}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'e' || e.key === '+' || e.key === '-' || e.key === '.') {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -422,6 +456,19 @@ export function AmefForm(props: AmefFormsProps) {
                                         min="1" 
                                         max="10"
                                         {...field} 
+                                        onChange={(e) => {
+                                            const value = parseInt(e.target.value);
+                                            if (!isNaN(value) && value >= 1 && value <= 10) {
+                                                field.onChange(e);
+                                            } else {
+                                                field.onChange({ target: { value: "" } });
+                                            }
+                                        }}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'e' || e.key === '+' || e.key === '-' || e.key === '.') {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
