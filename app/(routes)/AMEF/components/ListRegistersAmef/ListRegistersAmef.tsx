@@ -23,6 +23,13 @@ export async function ListRegistersAmef(){
     });
 
     return(
-        <DataTable columns={columns} data={registersAmef}/>
+        <div className="p-6">
+            <div className="flex items-center justify-between mb-4">
+                <h1 className="text-2xl font-bold text-slate-900">
+                    Análisis Modal de Efectos y Fallos (AMEF)
+                </h1>
+            </div>
+            <DataTable columns={columns} data={registersAmef}/>
+        </div>
     )
 }

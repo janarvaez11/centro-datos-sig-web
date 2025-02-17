@@ -46,12 +46,40 @@ export const columns: ColumnDef<Amef>[] = [
         header: "Fecha detección",
     },
     {
-        accessorKey: "nivelInspeccion",
-        header: "Nivel de Inspección Aplicado",
+        accessorKey: "modoFallo",
+        header: "Modo de Falla",
     },
     {
-        accessorKey: "planMuestra",
-        header: "Plan de Muestra Aplicado",
+        accessorKey: "efecto",
+        header: "Efecto",
+    },
+    {
+        accessorKey: "causaModoFallo",
+        header: "Causa del Modo de Falla",
+    },
+    {
+        accessorKey: "medidasEnsayo",
+        header: "Medidas de Ensayo",
+    },
+    {
+        accessorKey: "npr",
+        header: "NPR",
+    },
+    {
+        accessorKey: "estadoNPR",
+        header: "Estado NPR",
+    },
+    {
+        accessorKey: "accionImplementada",
+        header: "Acción Implementada",
+    },
+    {
+        accessorKey: "fechaValidacionCorreccion",
+        header: "Fecha Corrección",
+    },
+    {
+        accessorKey: "costoReproceso",
+        header: "Costo de Reproceso",
     },
 
     {

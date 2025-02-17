@@ -165,10 +165,10 @@ export function UserForm(props: UserFormsProps) {
                                     </FormControl>
 
                                     <SelectContent>
-                                        <SelectItem value="Responsable del area inspeccionada">Responsable del área inspeccionada</SelectItem>
+                                        <SelectItem value="Responsable del área inspeccionada">Responsable del área inspeccionada</SelectItem>
                                         <SelectItem value="Responsable de asistir">Responsable de asistir</SelectItem>
                                         <SelectItem value="Responsable de inspeccionar">Responsable de inspeccionar</SelectItem>
-                                        <SelectItem value="Responsable de Aprobar">Responsable de aprobar</SelectItem>
+                                        <SelectItem value="Responsable de aprobar">Responsable de aprobar</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />

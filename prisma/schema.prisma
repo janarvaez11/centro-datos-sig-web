@@ -117,3 +117,38 @@ model Amef {
   createdAt                   DateTime @default(now())
   updatedAt                   DateTime @updatedAt
 }
+
+model ModoFallo {
+  id        String   @id @default(uuid())
+  descripcion String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Efecto {
+  id        String   @id @default(uuid())
+  descripcion String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CausaModoFallo {
+  id        String   @id @default(uuid())
+  descripcion String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MedidasEnsayo {
+  id        String   @id @default(uuid())
+  descripcion String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AccionImplementada {
+  id        String   @id @default(uuid())
+  descripcion String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

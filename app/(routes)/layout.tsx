@@ -1,27 +1,23 @@
-import { Navbar } from "@/components/Navbar"
-import { Sidebar } from "@/components/Sidebar"
+"use client"
 
+import { Navbar } from "@/components/Navbar/Navbar"
+import { Sidebar } from "@/components/Sidebar/Sidebar"
+import { useState } from "react"
 
+export default function LayoutDashboard({ children }: { children: React.ReactNode }) {
+    const [isCollapsed, setIsCollapsed] = useState(false);
 
-export default function LayoutDashboard({ children }: { children: React.ReactElement }) {
     return (
-
-        <div className="flex w-full h-full" >
-
-            <div className="hidden xl:block xl:fixed w-80 h-full xl:fixed">
-                <Sidebar />
+        <div className="h-full relative">
+            <div className={`hidden md:flex h-full flex-col fixed inset-y-0 z-50 transition-all duration-200 ${isCollapsed ? 'w-[60px]' : 'w-[200px]'}`}>
+                <Sidebar onToggle={setIsCollapsed} />
             </div>
-
-            <div className="w-full xl:ml-80">
+            <div className={`flex-1 transition-all duration-200 ${isCollapsed ? 'md:ml-[60px]' : 'md:ml-[200px]'}`}>
                 <Navbar />
-                <div className="p-6 bg-[#fafbfc] dark:bg-secondary">
+                <main className="p-6">
                     {children}
-                </div>
+                </main>
             </div>
-
-
         </div>
-
-
     )
 }
