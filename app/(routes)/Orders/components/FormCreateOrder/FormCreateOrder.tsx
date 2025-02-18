@@ -74,6 +74,26 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
     {/*PARA GENERA EL NUMERO DE ORDEN */ }
     const [order, setOrderNumber] = useState("");
 
+    // Función para incrementar manualmente el número
+    const incrementOrderNumber = () => {
+        try {
+            const currentNumber = parseInt(order.replace('ODI-', ''));
+            if (isNaN(currentNumber)) {
+                throw new Error("Número de orden actual no válido");
+            }
+            const nextNumber = String(currentNumber + 1).padStart(5, '0');
+            const fullOrder = `ODI-${nextNumber}`;
+            setOrderNumber(fullOrder);
+            form.setValue("order", fullOrder, { shouldValidate: true });
+        } catch (error) {
+            console.error("Error incrementando el número:", error);
+            toast({
+                title: "Error",
+                description: "No se pudo incrementar el número de orden",
+                variant: "destructive"
+            });
+        }
+    };
 
     {/*Crear una función para obtener el último número de orden*/ }
     const fetchNextOrderNumber = async () => {
@@ -277,8 +297,18 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                                                 size="icon"
                                                 onClick={fetchNextOrderNumber}
                                                 disabled={loading}
+                                                title="Actualizar número"
                                             >
                                                 <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="icon"
+                                                onClick={incrementOrderNumber}
+                                                title="Incrementar número"
+                                            >
+                                                <span className="text-lg">+1</span>
                                             </Button>
                                         </div>
                                         <FormMessage />
