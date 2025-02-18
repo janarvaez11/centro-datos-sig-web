@@ -110,11 +110,11 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                     _t: new Date().getTime()
                 }
             });
-            
+
             if (response.data?.error) {
                 throw new Error(response.data.error);
             }
-            
+
             const nextNumber = response.data.number;
             if (!nextNumber || !/^\d{5}$/.test(nextNumber)) {
                 throw new Error("Formato de número inválido recibido del servidor");
@@ -146,7 +146,7 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
 
 
     //const { setOpenModalCreate} = props
-   // const { setOpenModalCreate, setOpen, setOrderId } = props
+    // const { setOpenModalCreate, setOpen, setOrderId } = props
 
     const router = useRouter()
 
@@ -181,7 +181,7 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             setLoading(true);
-            
+
             // Verificar que el número sea válido antes de continuar
             if (!values.order || !/^ODI-\d{5}$/.test(values.order)) {
                 throw new Error("Número de orden inválido");
@@ -198,6 +198,25 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                 await fetchNextOrderNumber();
                 return;
             }
+
+
+
+            ////////////////////////AÑADIDO
+
+            // Validar que el número de orden sea el siguiente en la secuencia
+            const lastOrderNumber = parseInt(checkExists.data.currentHighest.replace('ODI-', ''));
+            if (lastOrderNumber + 1 !== parseInt(values.order.replace('ODI-', ''))) {
+                toast({
+                    title: "Error",
+                    description: "El número de orden debe ser el siguiente en la secuencia.",
+                    variant: "destructive"
+                });
+                return;
+            }
+
+
+
+
 
             const responseOrder = await axios.post("/api/order", values);
             const orderId = responseOrder.data.id;
@@ -230,15 +249,15 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                         planMuestra: values.planMuestra
                     }),
                 });
-                
+
                 if (response.ok) {
                     toast({ title: "Datos enviados correctamente a Power Automate y SharePoint" });
                 }
             } catch (error) {
                 console.error("Error en Power Automate:", error);
-                toast({ 
-                    title: "Error al enviar los datos a Power Automate", 
-                    variant: "destructive" 
+                toast({
+                    title: "Error al enviar los datos a Power Automate",
+                    variant: "destructive"
                 });
             }
 
@@ -278,16 +297,16 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                                         <FormLabel>Número de Orden</FormLabel>
                                         <div className="flex items-center gap-2">
                                             <div className="flex-none">
-                                                <Input 
-                                                    value="ODI-" 
-                                                    readOnly 
+                                                <Input
+                                                    value="ODI-"
+                                                    readOnly
                                                     className="w-16 bg-gray-100"
                                                 />
                                             </div>
                                             <FormControl>
-                                                <Input 
-                                                    readOnly 
-                                                    value={field.value.replace('ODI-', '')} 
+                                                <Input
+                                                    readOnly
+                                                    value={field.value.replace('ODI-', '')}
                                                     className="flex-1"
                                                 />
                                             </FormControl>
