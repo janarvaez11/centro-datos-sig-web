@@ -81,8 +81,13 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
             setLoading(true);
             const response = await axios.get("/api/order/last", {
                 headers: {
-                    'Cache-Control': 'no-cache',
-                    'Pragma': 'no-cache'
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                },
+                // Añadir un parámetro timestamp para evitar la caché
+                params: {
+                    _t: new Date().getTime()
                 }
             });
             
@@ -95,6 +100,8 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                 throw new Error("Formato de número inválido recibido del servidor");
             }
 
+            console.log('Número obtenido:', nextNumber, 'Total órdenes:', response.data.totalOrders);
+
             const fullOrder = `ODI-${nextNumber}`;
             setOrderNumber(fullOrder);
             form.setValue("order", fullOrder, { shouldValidate: true });
@@ -102,14 +109,17 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
             console.error("Error obteniendo el número de orden:", error);
             toast({
                 title: "Error",
-                description: error instanceof Error ? error.message : "Error al generar el número de orden",
+                description: "Error al generar el número de orden. Por favor, intente nuevamente.",
                 variant: "destructive"
             });
+            // Intentar obtener el número nuevamente después de un breve retraso
+            setTimeout(fetchNextOrderNumber, 1000);
         } finally {
             setLoading(false);
         }
     };
 
+    // Asegurarse de que se obtenga el número al montar el componente
     useEffect(() => {
         fetchNextOrderNumber();
     }, []);
@@ -152,14 +162,20 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
         try {
             setLoading(true);
             
-            // Verificar nuevamente si el número existe antes de crear
+            // Verificar que el número sea válido antes de continuar
+            if (!values.order || !/^ODI-\d{5}$/.test(values.order)) {
+                throw new Error("Número de orden inválido");
+            }
+
+            // Verificar nuevamente si el número existe
             const checkExists = await axios.get(`/api/order/check/${values.order}`);
             if (checkExists.data.exists) {
                 toast({
                     title: "Error",
-                    description: "El número de orden ya existe",
+                    description: "El número de orden ya existe. Obteniendo nuevo número...",
                     variant: "destructive"
                 });
+                await fetchNextOrderNumber();
                 return;
             }
 
