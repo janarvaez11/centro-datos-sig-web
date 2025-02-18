@@ -95,6 +95,35 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
         }
     };
 
+
+
+
+        // Función para incrementar manualmente el número
+        const decrementOrderNumber = () => {
+            try {
+                const currentNumber = parseInt(order.replace('ODI-', ''));
+                if (isNaN(currentNumber)) {
+                    throw new Error("Número de orden actual no válido");
+                }
+                const nextNumber = String(currentNumber - 1).padStart(5, '0');
+                const fullOrder = `ODI-${nextNumber}`;
+                setOrderNumber(fullOrder);
+                form.setValue("order", fullOrder, { shouldValidate: true });
+            } catch (error) {
+                console.error("Error incrementando el número:", error);
+                toast({
+                    title: "Error",
+                    description: "No se pudo incrementar el número de orden",
+                    variant: "destructive"
+                });
+            }
+        };
+
+
+
+
+
+
     {/*Crear una función para obtener el último número de orden*/ }
     const fetchNextOrderNumber = async () => {
         try {
@@ -300,7 +329,7 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                                                 <Input
                                                     value="ODI-"
                                                     readOnly
-                                                    className="w-16 bg-gray-100"
+                                                    className="w-14 bg-gray-100"
                                                 />
                                             </div>
                                             <FormControl>
@@ -327,8 +356,21 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                                                 onClick={incrementOrderNumber}
                                                 title="Incrementar número"
                                             >
-                                                <span className="text-lg">+1</span>
+                                                <span className="text-lg">+</span>
                                             </Button>
+
+
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="icon"
+                                                onClick={decrementOrderNumber}
+                                                title="Reducir número"
+                                            >
+                                                <span className="text-lg">-</span>
+                                            </Button>
+
+
                                         </div>
                                         <FormMessage />
                                     </FormItem>
