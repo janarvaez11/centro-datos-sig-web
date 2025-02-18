@@ -3,8 +3,8 @@ import { db } from "@/lib/db";
 
 export async function GET() {
     try {
-        // Obtener todas las órdenes
-        const allOrders = await db.order.findMany({
+        // Obtener la última orden
+        const lastOrder = await db.order.findFirst({
             select: {
                 order: true
             },
@@ -13,44 +13,22 @@ export async function GET() {
             }
         });
 
-        // Filtrar y ordenar las órdenes válidas
-        const validOrders = allOrders
-            .map(o => o.order)
-            .filter(order => order.startsWith('ODI-'))
-            .map(order => {
-                const num = parseInt(order.split('-')[1]);
-                return { order, num };
-            })
-            .sort((a, b) => a.num - b.num);
-
-        // Encontrar el primer número faltante en la secuencia
         let nextNumber = 1;
-        for (let i = 0; i < validOrders.length; i++) {
-            if (validOrders[i].num !== i + 1) {
-                nextNumber = i + 1;
-                break;
+        
+        if (lastOrder) {
+            // Extraer el número de la última orden
+            const match = lastOrder.order.match(/\d+$/);
+            if (match) {
+                nextNumber = parseInt(match[0]) + 1;
             }
-            nextNumber = i + 2; // Si no hay huecos, usar el siguiente número
         }
 
-        // Si no hay órdenes, empezar desde 1
-        if (validOrders.length === 0) {
-            nextNumber = 1;
-        }
-
-        // Generar el siguiente número en formato ODI-00001
-        const nextOrder = `ODI-${String(nextNumber).padStart(5, '0')}`;
-
-        // Verificar si el número generado ya existe
-        const exists = allOrders.some(o => o.order === nextOrder);
-        if (exists) {
-            throw new Error("Número de orden duplicado detectado");
-        }
+        // Formatear el número con ceros a la izquierda
+        const formattedNumber = String(nextNumber).padStart(5, '0');
 
         return new NextResponse(
             JSON.stringify({ 
-                order: nextOrder,
-                currentMax: validOrders.length > 0 ? validOrders[validOrders.length - 1].order : null
+                number: formattedNumber
             }), 
             {
                 headers: {
@@ -71,10 +49,7 @@ export async function GET() {
             { 
                 status: 500,
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-                    'Pragma': 'no-cache',
-                    'Expires': '0'
+                    'Content-Type': 'application/json'
                 }
             }
         );

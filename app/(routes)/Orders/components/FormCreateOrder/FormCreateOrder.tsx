@@ -90,13 +90,14 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                 throw new Error(response.data.error);
             }
             
-            const nextOrder = response.data.order;
-            if (!nextOrder || !/^ODI-\d{5}$/.test(nextOrder)) {
-                throw new Error("Formato de orden inválido recibido del servidor");
+            const nextNumber = response.data.number;
+            if (!nextNumber || !/^\d{5}$/.test(nextNumber)) {
+                throw new Error("Formato de número inválido recibido del servidor");
             }
 
-            setOrderNumber(nextOrder);
-            form.setValue("order", nextOrder, { shouldValidate: true });
+            const fullOrder = `ODI-${nextNumber}`;
+            setOrderNumber(fullOrder);
+            form.setValue("order", fullOrder, { shouldValidate: true });
         } catch (error) {
             console.error("Error obteniendo el número de orden:", error);
             toast({
@@ -240,8 +241,19 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                                     <FormItem>
                                         <FormLabel>Número de Orden</FormLabel>
                                         <div className="flex items-center gap-2">
+                                            <div className="flex-none">
+                                                <Input 
+                                                    value="ODI-" 
+                                                    readOnly 
+                                                    className="w-16 bg-gray-100"
+                                                />
+                                            </div>
                                             <FormControl>
-                                                <Input readOnly {...field} />
+                                                <Input 
+                                                    readOnly 
+                                                    value={field.value.replace('ODI-', '')} 
+                                                    className="flex-1"
+                                                />
                                             </FormControl>
                                             <Button
                                                 type="button"
