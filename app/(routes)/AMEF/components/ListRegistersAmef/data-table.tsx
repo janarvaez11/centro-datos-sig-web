@@ -92,13 +92,16 @@ export function DataTable<TData, TValue>({
 
             <div className="overflow-auto border-t">
                 <div className="min-w-full inline-block align-middle">
-                    <Table>
+                    <Table className="border-collapse border border-gray-200 dark:border-gray-700">
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id}>
+                                <TableRow key={headerGroup.id} className="bg-gray-50 dark:bg-gray-800">
                                     {headerGroup.headers.map((header) => {
                                         return (
-                                            <TableHead key={header.id} className="whitespace-nowrap bg-slate-50 font-medium">
+                                            <TableHead 
+                                                key={header.id} 
+                                                className="whitespace-nowrap font-medium text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 p-3"
+                                            >
                                                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                                             </TableHead>
                                         )
@@ -109,9 +112,16 @@ export function DataTable<TData, TValue>({
                         <TableBody>
                             {table.getRowModel().rows?.length ? (
                                 table.getRowModel().rows.map((row) => (
-                                    <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                                    <TableRow 
+                                        key={row.id} 
+                                        data-state={row.getIsSelected() && "selected"}
+                                        className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                                    >
                                         {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id} className="whitespace-nowrap">
+                                            <TableCell 
+                                                key={cell.id} 
+                                                className="border border-gray-200 dark:border-gray-700 p-3"
+                                            >
                                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                             </TableCell>
                                         ))}
@@ -119,7 +129,10 @@ export function DataTable<TData, TValue>({
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                                    <TableCell 
+                                        colSpan={columns.length} 
+                                        className="h-24 text-center border border-gray-200 dark:border-gray-700"
+                                    >
                                         No hay registros AMEF
                                     </TableCell>
                                 </TableRow>

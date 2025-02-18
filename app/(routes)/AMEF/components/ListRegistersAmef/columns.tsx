@@ -8,6 +8,20 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import Link from 'next/link'
 import Image from "next/image"
 
+// Función para determinar el color del estado NPR
+function getEstadoNPRStyle(npr: string) {
+    const nprValue = parseInt(npr);
+    if (nprValue >= 0 && nprValue <= 100) {
+        return "bg-green-500 text-white";
+    } else if (nprValue >= 101 && nprValue <= 500) {
+        return "bg-yellow-500 text-white";
+    } else if (nprValue >= 501 && nprValue <= 800) {
+        return "bg-orange-500 text-white";
+    } else if (nprValue >= 801 && nprValue <= 1000) {
+        return "bg-red-500 text-white";
+    }
+    return "";
+}
 
 export const columns: ColumnDef<Amef>[] = [
     {
@@ -15,51 +29,16 @@ export const columns: ColumnDef<Amef>[] = [
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Orden de Inspección
+                    Orden
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
         },
-    },
-    {
-        accessorKey: "procesoProduccion",
-        header: "Proceso",
-    },
-    {
-        accessorKey: "fig",
-        header: "FIG",
-    },
-    {
-        accessorKey: "proyecto",
-        header: "Proyecto",
-    },
-    {
-        accessorKey: "cliente",
-        header: "Cliente",
-    },
-    {
-        accessorKey: "elemento",
-        header: "Elemento",
-    },
-    {
-        accessorKey: "fechaDeteccion",
-        header: "Fecha detección",
-    },
-    {
-        accessorKey: "modoFallo",
-        header: "Modo de Falla",
-    },
-    {
-        accessorKey: "efecto",
-        header: "Efecto",
-    },
-    {
-        accessorKey: "causaModoFallo",
-        header: "Causa del Modo de Falla",
-    },
-    {
-        accessorKey: "medidasEnsayo",
-        header: "Medidas de Ensayo",
+        cell: ({ row }) => (
+            <div className="bg-green-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("order")}
+            </div>
+        )
     },
     {
         accessorKey: "npr",
@@ -68,18 +47,131 @@ export const columns: ColumnDef<Amef>[] = [
     {
         accessorKey: "estadoNPR",
         header: "Estado NPR",
+        cell: ({ row }) => {
+            const npr = row.getValue("npr") as string;
+            return (
+                <div className={`px-2 py-1 rounded-full text-center ${getEstadoNPRStyle(npr)}`}>
+                    {row.getValue("estadoNPR")}
+                </div>
+            );
+        }
+    },
+    {
+        accessorKey: "procesoProduccion",
+        header: "Proceso",
+        cell: ({ row }) => (
+            <div className="bg-green-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("procesoProduccion")}
+            </div>
+        )
+    },
+    {
+        accessorKey: "fig",
+        header: "FIG",
+        cell: ({ row }) => (
+            <div className="bg-green-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("fig")}
+            </div>
+        )
+    },
+    {
+        accessorKey: "proyecto",
+        header: "Proyecto",
+        cell: ({ row }) => (
+            <div className="bg-green-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("proyecto")}
+            </div>
+        )
+    },
+    {
+        accessorKey: "cliente",
+        header: "Cliente",
+        cell: ({ row }) => (
+            <div className="bg-green-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("cliente")}
+            </div>
+        )
+    },
+    {
+        accessorKey: "elemento",
+        header: "Elemento",
+        cell: ({ row }) => (
+            <div className="bg-green-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("elemento")}
+            </div>
+        )
+    },
+    {
+        accessorKey: "fechaDeteccion",
+        header: "Fecha detección",
+        cell: ({ row }) => (
+            <div className="bg-green-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("fechaDeteccion")}
+            </div>
+        )
+    },
+    {
+        accessorKey: "modoFallo",
+        header: "Modo de Falla",
+        cell: ({ row }) => (
+            <div className="bg-yellow-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("modoFallo")}
+            </div>
+        )
+    },
+    {
+        accessorKey: "efecto",
+        header: "Efecto",
+        cell: ({ row }) => (
+            <div className="bg-yellow-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("efecto")}
+            </div>
+        )
+    },
+    {
+        accessorKey: "causaModoFallo",
+        header: "Causa del Modo de Falla",
+        cell: ({ row }) => (
+            <div className="bg-yellow-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("causaModoFallo")}
+            </div>
+        )
+    },
+    {
+        accessorKey: "medidasEnsayo",
+        header: "Medidas de Ensayo",
+        cell: ({ row }) => (
+            <div className="bg-yellow-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("medidasEnsayo")}
+            </div>
+        )
     },
     {
         accessorKey: "accionImplementada",
         header: "Acción Implementada",
+        cell: ({ row }) => (
+            <div className="bg-yellow-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("accionImplementada")}
+            </div>
+        )
     },
     {
         accessorKey: "fechaValidacionCorreccion",
         header: "Fecha Corrección",
+        cell: ({ row }) => (
+            <div className="bg-yellow-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("fechaValidacionCorreccion")}
+            </div>
+        )
     },
     {
         accessorKey: "costoReproceso",
         header: "Costo de Reproceso",
+        cell: ({ row }) => (
+            <div className="bg-yellow-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("costoReproceso")}
+            </div>
+        )
     },
 
     {
