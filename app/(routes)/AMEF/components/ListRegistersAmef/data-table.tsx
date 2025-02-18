@@ -80,6 +80,12 @@ export function DataTable<TData, TValue>({
                         onChange={(event) => table.getColumn("order")?.setFilterValue(event.target.value)}
                         className="flex-1"
                     />
+                    <Input
+                        placeholder="Filtrar por Estado NPR..."
+                        value={(table.getColumn("estadoNPR")?.getFilterValue() as string) ?? ""}
+                        onChange={(event) => table.getColumn("estadoNPR")?.setFilterValue(event.target.value)}
+                        className="flex-1"
+                    />
                     <input
                         type="date"
                         placeholder="Filtrar por fecha"
@@ -98,8 +104,8 @@ export function DataTable<TData, TValue>({
                                 <TableRow key={headerGroup.id} className="bg-gray-50 dark:bg-gray-800">
                                     {headerGroup.headers.map((header) => {
                                         return (
-                                            <TableHead 
-                                                key={header.id} 
+                                            <TableHead
+                                                key={header.id}
                                                 className="whitespace-nowrap font-medium text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 p-3"
                                             >
                                                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -112,14 +118,14 @@ export function DataTable<TData, TValue>({
                         <TableBody>
                             {table.getRowModel().rows?.length ? (
                                 table.getRowModel().rows.map((row) => (
-                                    <TableRow 
-                                        key={row.id} 
+                                    <TableRow
+                                        key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
                                         className="hover:bg-gray-50 dark:hover:bg-gray-700"
                                     >
                                         {row.getVisibleCells().map((cell) => (
-                                            <TableCell 
-                                                key={cell.id} 
+                                            <TableCell
+                                                key={cell.id}
                                                 className="border border-gray-200 dark:border-gray-700 p-3"
                                             >
                                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -129,8 +135,8 @@ export function DataTable<TData, TValue>({
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell 
-                                        colSpan={columns.length} 
+                                    <TableCell
+                                        colSpan={columns.length}
                                         className="h-24 text-center border border-gray-200 dark:border-gray-700"
                                     >
                                         No hay registros AMEF

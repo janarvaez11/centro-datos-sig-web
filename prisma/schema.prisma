@@ -92,6 +92,7 @@ model Event {
 model Amef {
   id                          String   @id @default(uuid())
   order                       String
+  especificacionProceso       String
   procesoProduccion           String
   fig                         String
   proyecto                    String

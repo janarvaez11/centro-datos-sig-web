@@ -68,6 +68,7 @@ export async function POST(req: Request) {
             data: {
                 order: order.order,
                 procesoProduccion: order.procesoProduccion,
+                especificacionProceso: order.especificacionProceso,
                 fig: order.fig,
                 proyecto: order.proyecto,
                 cliente: order.cliente,

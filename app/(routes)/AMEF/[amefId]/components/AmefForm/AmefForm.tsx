@@ -93,6 +93,7 @@ export function AmefForm(props: AmefFormsProps) {
         defaultValues: {
             order: amef.order,
             procesoProduccion: amef.procesoProduccion,
+            especificacionProceso: amef.especificacionProceso,
             fig: amef.fig,
             proyecto: amef.proyecto,
             cliente: amef.cliente,
@@ -277,6 +278,35 @@ export function AmefForm(props: AmefFormsProps) {
                                 </FormItem>
                             )}
                         />
+                        {/* ESPECIFICACIÓN PROCESO PRODUCCION */}
+                        <FormField
+                            control={form.control}
+                            name="especificacionProceso"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Especificación del Proceso</FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                    >
+
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Seleccione la especificación" />
+                                            </SelectTrigger>
+                                        </FormControl>
+
+                                        <SelectContent>
+                                        <SelectItem value="Inspección Grating">Inspección Grating</SelectItem>
+                                        <SelectItem value="Inspección Pasamanos">Inspección Pasamanos</SelectItem>
+                                        <SelectItem value="Inspección Bandejas Portacables">Inspección Bandejas Portacables</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
 
                         {/* FIG */}
                         <FormField

@@ -66,6 +66,15 @@ export const columns: ColumnDef<Amef>[] = [
         )
     },
     {
+        accessorKey: "especificacionProceso",
+        header: "Especificacion del Proceso",
+        cell: ({ row }) => (
+            <div className="bg-green-100 dark:bg-transparent p-2 rounded dark:text-white">
+                {row.getValue("especificacionProceso")}
+            </div>
+        )
+    },
+    {
         accessorKey: "fig",
         header: "FIG",
         cell: ({ row }) => (
