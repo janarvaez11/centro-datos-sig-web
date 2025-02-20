@@ -7,7 +7,7 @@ export const formSchema = z.object({
     fechaProgramada: z.string().min(2),
     procesoProduccion: z.string().min(2),
     especificacionProceso: z.string().min(2),
-    muestra: z.string().min(2),
+    muestra: z.string().min(1),
     cliente: z.string().min(2),
     fig: z.string().min(2),
     proyecto: z.string().min(2),

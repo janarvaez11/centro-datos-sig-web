@@ -373,7 +373,7 @@ export function OrderForm(props: OrderFormsProps) {
                         name="area"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Area</FormLabel>
+                                <FormLabel>Área</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
@@ -386,8 +386,8 @@ export function OrderForm(props: OrderFormsProps) {
                                     </FormControl>
 
                                     <SelectContent>
-                                        <SelectItem value="Pmc Produccion">Pmc Produccion</SelectItem>
-                                        <SelectItem value="Bodega">Bodega</SelectItem>
+                                        <SelectItem value="PMC PRODUCCIÓN">PMC PRODUCCIÓN</SelectItem>
+                                        <SelectItem value="PMC BODEGA">PMC BODEGA</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />

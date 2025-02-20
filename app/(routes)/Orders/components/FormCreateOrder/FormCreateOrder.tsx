@@ -588,7 +588,7 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                                 name="area"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Area</FormLabel>
+                                        <FormLabel>Área</FormLabel>
                                         <Select
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
@@ -599,8 +599,8 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="Pmc Producción">Pmc Producción</SelectItem>
-                                                <SelectItem value="Bodega">Bodega</SelectItem>
+                                                <SelectItem value="PMC PRODUCCIÓN">PMC PRODUCCIÓN</SelectItem>
+                                                <SelectItem value="PMC BODEGA">PMC BODEGA</SelectItem>
                                             </SelectContent>
                                         </Select>
 
