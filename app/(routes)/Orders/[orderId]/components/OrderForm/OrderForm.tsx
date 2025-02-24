@@ -70,18 +70,19 @@ export function OrderForm(props: OrderFormsProps) {
         try {
             await axios.patch(`/api/order/${order.id}`, values)
             toast({
-                title: "Orden Actualizada"
-            })
+                title: "Orden actualizada correctamente",
+                description: "Los cambios se han guardado y sincronizado"
+            });
             router.refresh()
             router.push("/Orders")
         } catch (error) {
+            console.error("Error al actualizar:", error);
             toast({
                 title: "Error al actualizar los registros",
+                description: "Por favor, intente nuevamente",
                 variant: "destructive"
             })
-
         }
-
     }
 
 

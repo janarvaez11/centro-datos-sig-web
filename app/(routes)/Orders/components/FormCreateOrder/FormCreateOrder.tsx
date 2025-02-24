@@ -229,7 +229,6 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
             }
 
 
-
             ////////////////////////AÑADIDO
 
             // Validar que el número de orden sea el siguiente en la secuencia
@@ -242,9 +241,6 @@ export function FormCreateOrder({ setOpenModalCreate, setOpen, setOrderId, onOrd
                 });
                 return;
             }
-
-
-
 
 
             const responseOrder = await axios.post("/api/order", values);
