@@ -36,6 +36,7 @@ import { Separator } from "@radix-ui/react-select"
 import { Search, Plus } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
+
 // Función para calcular el NPR y determinar el estado
 function calculateNPRAndState(ocurrencia: string, gravedad: string, deteccion: string) {
     const o = parseInt(ocurrencia);
@@ -565,6 +566,7 @@ export function AmefForm(props: AmefFormsProps) {
                                 </FormItem>
                             )}
                         />
+
 
                         {/* OCURRENCIA */}
                         <FormField

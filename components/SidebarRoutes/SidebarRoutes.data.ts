@@ -8,6 +8,7 @@ import {
     Calendar,
     User,
     Circle,
+    BookA,
     PenTool
 } from "lucide-react";
 
@@ -39,6 +40,12 @@ export const dataGeneralSidebar = [
         label: "Instrumentos",
         href: "/Tools"
     },
+    {
+        icon: BookA,
+        label: "Modos de Falla",
+        href: "/ModosFalla"
+    },
+
 ]
 
 export const dataToolsSidebar = [
