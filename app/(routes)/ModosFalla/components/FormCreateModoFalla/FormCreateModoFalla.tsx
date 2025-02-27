@@ -277,7 +277,7 @@ export function FormCreateModoFalla(props: FormCreateModoFallaProps) {
                             name="gravedad"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Indicardor de Gravedad (1-10)</FormLabel>
+                                    <FormLabel>Indicador de Gravedad (1-10)</FormLabel>
                                     <FormControl>
                                         <Input
                                             placeholder="1-10"
@@ -382,8 +382,7 @@ export function FormCreateModoFalla(props: FormCreateModoFallaProps) {
                             }}
                         />
 
-            
-
+        
                     </div>
                     <Button type="submit" disabled={!isValid}> Registrar modo de falla</Button>
                 </form>

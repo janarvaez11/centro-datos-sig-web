@@ -1,30 +1,29 @@
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const { userId } = auth();
-        if (!userId) {
-            return new NextResponse("Unauthorized", { status: 401 });
-        }
-
-        const users = await db.user.findMany({
+        const modosFallo = await db.modosFallo.findMany({
             select: {
                 id: true,
-                name: true,
-                rol: true,
-                code: true,
-                function: true
+                modoFallo: true,
+                codigo: true,
+                efecto: true,
+                causaModoFallo: true,
+                ocurrencia: true,
+                gravedad: true,
+                deteccion: true,
+                npr: true,
+                estadoNPR: true
             },
             orderBy: {
-                name: 'asc'
+                modoFallo: 'asc'
             }
         });
 
-        return NextResponse.json(users);
+        return NextResponse.json(modosFallo);
     } catch (error) {
-        console.error("[USERS_GET]", error);
+        console.error("[MODOSFALLO_GET]", error);
         return new NextResponse("Error interno", { status: 500 });
     }
 } 

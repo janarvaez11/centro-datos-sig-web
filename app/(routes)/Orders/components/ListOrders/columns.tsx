@@ -10,21 +10,7 @@ import Image from "next/image"
 
 
 export const columns: ColumnDef<Order>[] = [
-    /*
-    {
-        accessorKey: "profileImage",
-        header: "Imagen",
-        cell: ({ row }) => {
-            const image = row.getValue("profileImage")
-            return (
-                <div className="px-3">
-                    <Image src={typeof image === "string" ? image : "/images/order-icon.png"}
-                        width={40} height={40} alt="Image" className="h-auto w-auto" />
-                </div>
-            )
-        }
-    },
-    */
+
     {
         accessorKey: "order",
         header: ({ column }) => {
@@ -66,6 +52,10 @@ export const columns: ColumnDef<Order>[] = [
     {
         accessorKey: "tipoInspeccion",
         header: "Tipo de Inspeccion",
+    },
+    {
+        accessorKey: "especificacionProceso",
+        header: "Especificación Proceso",
     },
     {
         accessorKey: "fechaProgramada",

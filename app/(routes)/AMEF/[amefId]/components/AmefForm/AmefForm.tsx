@@ -80,6 +80,19 @@ interface CatalogItem {
 
 type CatalogField = "modoFallo" | "efecto" | "causaModoFallo" | "medidasEnsayo" | "accionImplementada";
 
+interface ModoFallo {
+    id: string;
+    modoFallo: string;
+    codigo: string;
+    efecto: string;
+    causaModoFallo: string;
+    ocurrencia: string;
+    gravedad: string;
+    deteccion: string;
+    npr: string;
+    estadoNPR: string;
+}
+
 export function AmefForm(props: AmefFormsProps) {
     const { amef } = props
     const router = useRouter()
@@ -88,6 +101,9 @@ export function AmefForm(props: AmefFormsProps) {
     const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([])
     const [newItem, setNewItem] = useState("")
     const [loading, setLoading] = useState(false)
+    const [modosFallo, setModosFallo] = useState<ModoFallo[]>([])
+    const [searchTerm, setSearchTerm] = useState("")
+    const [filteredModosFallo, setFilteredModosFallo] = useState<ModoFallo[]>([])
 
     const form = useForm<z.infer<typeof amefFormSchema>>({
         resolver: zodResolver(amefFormSchema),
@@ -148,6 +164,43 @@ export function AmefForm(props: AmefFormsProps) {
         form.setValue("npr", npr);
         form.setValue("estadoNPR", estado);
     }, [form.watch("ocurrencia"), form.watch("gravedad"), form.watch("deteccion")]);
+
+    // Cargar modos de fallo al inicio
+    useEffect(() => {
+        const loadModosFallo = async () => {
+            try {
+                const response = await axios.get('/api/modofalla/all');
+                setModosFallo(response.data);
+                setFilteredModosFallo(response.data);
+            } catch (error) {
+                console.error('Error cargando modos de fallo:', error);
+                toast({
+                    title: "Error al cargar modos de fallo",
+                    variant: "destructive"
+                });
+            }
+        };
+        loadModosFallo();
+    }, []);
+
+    // Filtrar modos de fallo cuando cambia el término de búsqueda
+    useEffect(() => {
+        const filtered = modosFallo.filter(modo => 
+            modo.modoFallo.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredModosFallo(filtered);
+    }, [searchTerm, modosFallo]);
+
+    // Función para seleccionar un modo de fallo
+    const selectModoFallo = (modo: ModoFallo) => {
+        form.setValue("modoFallo", modo.modoFallo);
+        form.setValue("efecto", modo.efecto);
+        form.setValue("causaModoFallo", modo.causaModoFallo);
+        form.setValue("ocurrencia", modo.ocurrencia);
+        form.setValue("gravedad", modo.gravedad);
+        form.setValue("deteccion", modo.deteccion);
+        setShowModal(false);
+    };
 
     // Función para abrir el modal con el tipo correspondiente
     const openModal = async (type: CatalogField) => {
@@ -480,13 +533,16 @@ export function AmefForm(props: AmefFormsProps) {
                                     <FormLabel>Modo de Fallo</FormLabel>
                                     <div className="flex items-center gap-2">
                                         <FormControl>
-                                            <Input {...field} />
+                                            <Input readOnly {...field} />
                                         </FormControl>
                                         <Button
                                             type="button"
                                             variant="ghost"
                                             size="icon"
-                                            onClick={() => openModal("modoFallo" as CatalogField)}
+                                            onClick={() => {
+                                                setModalType("modoFallo");
+                                                setShowModal(true);
+                                            }}
                                         >
                                             <Search className="h-4 w-4" />
                                         </Button>
@@ -502,19 +558,9 @@ export function AmefForm(props: AmefFormsProps) {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Efecto</FormLabel>
-                                    <div className="flex items-center gap-2">
-                                        <FormControl>
-                                            <Input placeholder="Efecto" type="text" {...field} />
-                                        </FormControl>
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => openModal("efecto" as CatalogField)}
-                                        >
-                                            <Search className="h-4 w-4" />
-                                        </Button>
-                                    </div>
+                                    <FormControl>
+                                        <Input readOnly {...field} />
+                                    </FormControl>
                                 </FormItem>
                             )}
                         />
@@ -526,19 +572,9 @@ export function AmefForm(props: AmefFormsProps) {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Causa Modo de Fallo</FormLabel>
-                                    <div className="flex items-center gap-2">
-                                        <FormControl>
-                                            <Input placeholder="Causa modo de fallo" type="text" {...field} />
-                                        </FormControl>
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => openModal("causaModoFallo" as CatalogField)}
-                                        >
-                                            <Search className="h-4 w-4" />
-                                        </Button>
-                                    </div>
+                                    <FormControl>
+                                        <Input readOnly {...field} />
+                                    </FormControl>
                                 </FormItem>
                             )}
                         />
@@ -577,24 +613,8 @@ export function AmefForm(props: AmefFormsProps) {
                                     <FormLabel>Ocurrencia (1-10)</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="1-10"
-                                            type="number"
-                                            min="1"
-                                            max="10"
+                                            readOnly
                                             {...field}
-                                            onChange={(e) => {
-                                                const value = parseInt(e.target.value);
-                                                if (!isNaN(value) && value >= 1 && value <= 10) {
-                                                    field.onChange(e);
-                                                } else {
-                                                    field.onChange({ target: { value: "" } });
-                                                }
-                                            }}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'e' || e.key === '+' || e.key === '-' || e.key === '.') {
-                                                    e.preventDefault();
-                                                }
-                                            }}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -611,24 +631,8 @@ export function AmefForm(props: AmefFormsProps) {
                                     <FormLabel>Gravedad (1-10)</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="1-10"
-                                            type="number"
-                                            min="1"
-                                            max="10"
+                                            readOnly
                                             {...field}
-                                            onChange={(e) => {
-                                                const value = parseInt(e.target.value);
-                                                if (!isNaN(value) && value >= 1 && value <= 10) {
-                                                    field.onChange(e);
-                                                } else {
-                                                    field.onChange({ target: { value: "" } });
-                                                }
-                                            }}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'e' || e.key === '+' || e.key === '-' || e.key === '.') {
-                                                    e.preventDefault();
-                                                }
-                                            }}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -645,24 +649,8 @@ export function AmefForm(props: AmefFormsProps) {
                                     <FormLabel>Detección (1-10)</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="1-10"
-                                            type="number"
-                                            min="1"
-                                            max="10"
+                                            readOnly
                                             {...field}
-                                            onChange={(e) => {
-                                                const value = parseInt(e.target.value);
-                                                if (!isNaN(value) && value >= 1 && value <= 10) {
-                                                    field.onChange(e);
-                                                } else {
-                                                    field.onChange({ target: { value: "" } });
-                                                }
-                                            }}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'e' || e.key === '+' || e.key === '-' || e.key === '.') {
-                                                    e.preventDefault();
-                                                }
-                                            }}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -774,8 +762,40 @@ export function AmefForm(props: AmefFormsProps) {
                 </form>
             </Form>
 
-            {/* Modal de Catálogo */}
-            {showModal && (
+            {/* Modal de búsqueda de Modos de Fallo */}
+            {showModal && modalType === "modoFallo" && (
+                <Dialog open={showModal} onOpenChange={setShowModal}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Seleccionar Modo de Fallo</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                            <Input
+                                placeholder="Buscar modo de fallo..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            <div className="max-h-[300px] overflow-y-auto">
+                                {filteredModosFallo.map((modo) => (
+                                    <div
+                                        key={modo.id}
+                                        className="p-2 hover:bg-gray-100 cursor-pointer rounded"
+                                        onClick={() => selectModoFallo(modo)}
+                                    >
+                                        <div className="font-medium">{modo.modoFallo}</div>
+                                        <div className="text-sm text-gray-500">
+                                            Código: {modo.codigo}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            )}
+
+            {/* Modal original para MedidasEnsayo y AccionImplementada */}
+            {showModal && modalType !== "modoFallo" && (
                 <Dialog open={showModal} onOpenChange={setShowModal}>
                     <DialogContent>
                         <DialogHeader>
