@@ -61,6 +61,8 @@ export function UserForm(props: UserFormsProps) {
             })
             router.refresh()
             router.push("/Users")
+            router.refresh()
+
 
         } catch (error) {
             toast({

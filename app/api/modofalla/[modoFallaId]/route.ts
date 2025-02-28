@@ -42,7 +42,14 @@ export async function PATCH(
         
         */
 
-        return NextResponse.json(modoFalla)
+        return new NextResponse(JSON.stringify(modoFalla), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            }
+        });
     } catch (error) {
         console.log("[MODOFALLA ID]", error);
         return new NextResponse("Error Interno", { status: 500 });
@@ -80,7 +87,14 @@ export async function DELETE(req: Request, {params}: {params: {modoFallaId: stri
             },
         });
 
-        return NextResponse.json(deleteModoFalla);
+        return new NextResponse(JSON.stringify(deleteModoFalla), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            }
+        });
     } catch (error) {
         console.log("[DELETE MODOFALLA ID]", error);
         return new NextResponse("Error Interno", {status: 500});

@@ -143,6 +143,7 @@ export function AmefForm(props: AmefFormsProps) {
             })
             router.refresh()
             router.push("/AMEF")
+            router.refresh()
         } catch (error) {
             toast({
                 title: "Error al actualizar los registros",
@@ -165,21 +166,28 @@ export function AmefForm(props: AmefFormsProps) {
         form.setValue("estadoNPR", estado);
     }, [form.watch("ocurrencia"), form.watch("gravedad"), form.watch("deteccion")]);
 
+    // Función para cargar los modos de fallo
+    const loadModosFallo = async () => {
+        try {
+            const response = await axios.get('/api/modofalla/all', {
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+            setModosFallo(response.data);
+            setFilteredModosFallo(response.data);
+        } catch (error) {
+            console.error('Error cargando modos de fallo:', error);
+            toast({
+                title: "Error al cargar modos de fallo",
+                variant: "destructive"
+            });
+        }
+    };
+
     // Cargar modos de fallo al inicio
     useEffect(() => {
-        const loadModosFallo = async () => {
-            try {
-                const response = await axios.get('/api/modofalla/all');
-                setModosFallo(response.data);
-                setFilteredModosFallo(response.data);
-            } catch (error) {
-                console.error('Error cargando modos de fallo:', error);
-                toast({
-                    title: "Error al cargar modos de fallo",
-                    variant: "destructive"
-                });
-            }
-        };
         loadModosFallo();
     }, []);
 
@@ -200,6 +208,13 @@ export function AmefForm(props: AmefFormsProps) {
         form.setValue("gravedad", modo.gravedad);
         form.setValue("deteccion", modo.deteccion);
         setShowModal(false);
+    };
+
+    // Modificar la función que abre el modal de modo de fallo
+    const openModoFalloModal = async () => {
+        setModalType("modoFallo");
+        await loadModosFallo(); // Recargar datos antes de mostrar el modal
+        setShowModal(true);
     };
 
     // Función para abrir el modal con el tipo correspondiente
@@ -539,10 +554,7 @@ export function AmefForm(props: AmefFormsProps) {
                                             type="button"
                                             variant="ghost"
                                             size="icon"
-                                            onClick={() => {
-                                                setModalType("modoFallo");
-                                                setShowModal(true);
-                                            }}
+                                            onClick={openModoFalloModal}
                                         >
                                             <Search className="h-4 w-4" />
                                         </Button>

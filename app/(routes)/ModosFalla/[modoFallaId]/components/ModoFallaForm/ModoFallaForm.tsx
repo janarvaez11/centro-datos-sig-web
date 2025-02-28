@@ -106,6 +106,7 @@ export function ModoFallaForm(props: ModoFallaFormsProps) {
             })
             router.refresh()
             router.push("/ModosFalla")
+            router.refresh()
 
         } catch (error) {
             toast({

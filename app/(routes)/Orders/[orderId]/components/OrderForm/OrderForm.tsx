@@ -75,6 +75,8 @@ export function OrderForm(props: OrderFormsProps) {
             });
             router.refresh()
             router.push("/Orders")
+            router.refresh()
+
         } catch (error) {
             console.error("Error al actualizar:", error);
             toast({

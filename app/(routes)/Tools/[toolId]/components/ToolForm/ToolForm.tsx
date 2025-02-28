@@ -59,6 +59,8 @@ export function ToolForm(props: ToolFormsProps) {
             })
             router.refresh()
             router.push("/Tools")
+            router.refresh()
+
         } catch (error) {
             toast({
                 title: "Error al actualizar el registro",

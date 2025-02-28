@@ -17,11 +17,18 @@ export async function GET() {
                 estadoNPR: true
             },
             orderBy: {
-                modoFallo: 'asc'
+                createdAt: 'desc'
             }
         });
 
-        return NextResponse.json(modosFallo);
+        return new NextResponse(JSON.stringify(modosFallo), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            }
+        });
     } catch (error) {
         console.error("[MODOSFALLO_GET]", error);
         return new NextResponse("Error interno", { status: 500 });
